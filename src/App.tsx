@@ -10,7 +10,7 @@ import {
 import Timeline from "./components/Timeline/Timeline";
 import FadeIn from "./components/FadeIn";
 import "./index.scss";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import i18n from "./i18n";
 
 function App() {

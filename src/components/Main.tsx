@@ -3,6 +3,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import "../assets/styles/Main.scss";
 import avatar from "../assets/images/home/avatar_circle.jpeg";
+import etsLogo from "../assets/images/home/ets.png";
 import { useTranslation } from "react-i18next";
 
 function Main() {
@@ -44,7 +45,7 @@ function Main() {
               rel="noopener noreferrer"
             >
               <img
-                src={require("../assets/images/home/ets.png")}
+                src={etsLogo}
                 alt="ÉTS Logo"
                 className="ets-logo"
               />

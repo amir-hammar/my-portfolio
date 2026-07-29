@@ -4,6 +4,18 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import "../assets/styles/Project.scss";
 import { useTranslation } from "react-i18next";
 
+import digiclipseMain from "../assets/images/projects/digiclipse_main.jpg";
+import digiclipseShowcase from "../assets/images/projects/digiclipse_showcase.png";
+import arcadeVideo from "../assets/images/projects/arcade.mp4";
+import arcadeThumbnail from "../assets/images/projects/arcade_thumbnail.png";
+import aspire from "../assets/images/projects/aspire.jpg";
+import database from "../assets/images/projects/database.jpg";
+import voiceTranslator from "../assets/images/projects/voice_translator.jpg";
+import sscMain from "../assets/images/projects/ssc_main.png";
+import sscSettings from "../assets/images/projects/ssc_settings.png";
+import sga from "../assets/images/projects/sga.png";
+import portfolio from "../assets/images/projects/portfolio.png";
+
 gsap.registerPlugin(ScrollTrigger);
 
 function Project() {
@@ -56,13 +68,13 @@ function Project() {
         <div className="project">
           <div className="image-container">
             <img
-              src={require("../assets/images/projects/digiclipse_main.jpg")}
+              src={digiclipseMain}
               className="zoom"
               alt="DigiClipse interface"
               width="50%"
             />
             <img
-              src={require("../assets/images/projects/digiclipse_showcase.png")}
+              src={digiclipseShowcase}
               className="zoom"
               alt="DigiClipse code"
               width="50%"
@@ -76,9 +88,9 @@ function Project() {
         <div className="project">
           <video
             ref={videoRef}
-            src={require("../assets/images/projects/arcade.mp4")}
+            src={arcadeVideo}
             className="zoom"
-            poster={require("../assets/images/projects/arcade_thumbnail.png")}
+            poster={arcadeThumbnail}
             loop
             muted
             playsInline
@@ -90,7 +102,7 @@ function Project() {
         </div>
         <div className="project">
           <img
-            src={require("../assets/images/projects/aspire.jpg")}
+            src={aspire}
             className="zoom"
             alt="thumbnail"
             width="100%"
@@ -102,7 +114,7 @@ function Project() {
         </div>
         <div className="project">
           <img
-            src={require("../assets/images/projects/database.jpg")}
+            src={database}
             className="zoom"
             alt="thumbnail"
             width="100%"
@@ -114,7 +126,7 @@ function Project() {
         </div>
         <div className="project">
           <img
-            src={require("../assets/images/projects/voice_translator.jpg")}
+            src={voiceTranslator}
             className="zoom"
             alt="thumbnail"
             width="100%"
@@ -122,20 +134,18 @@ function Project() {
           <div className="project-title">
             <h2>{t("projects.voiceTranslator.title")}</h2>
           </div>
-          <p>
           <p dangerouslySetInnerHTML={{ __html: t("projects.voiceTranslator.description") }}/>
-          </p>
         </div>
         <div className="project">
           <div className="image-container">
             <img
-              src={require("../assets/images/projects/ssc_main.png")}
+              src={sscMain}
               className="zoom main-image"
               alt="Main project view"
               width="100%"
             />
             <img
-              src={require("../assets/images/projects/ssc_settings.png")}
+              src={sscSettings}
               className="zoom"
               alt="Project detail 1"
               width="100%"
@@ -148,7 +158,7 @@ function Project() {
         </div>
         <div className="project">
           <img
-            src={require("../assets/images/projects/sga.png")}
+            src={sga}
             className="zoom"
             alt="thumbnail"
             width="100%"
@@ -160,7 +170,7 @@ function Project() {
         </div>
         <div className="project">
           <img
-            src={require("../assets/images/projects/portfolio.png")}
+            src={portfolio}
             className="zoom"
             alt="thumbnail"
             width="100%"

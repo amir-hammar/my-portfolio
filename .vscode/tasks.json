@@ -1,0 +1,138 @@
+{
+  // Tasks behind the launch configs, plus the checks worth running before you
+  // push. Run any of them with: Ctrl+Shift+P -> "Tasks: Run Task".
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Started automatically by the "Run website" launch configs.
+      // Vite is configured with server.open = false, so it won't race VS Code
+      // for the browser tab.
+      "label": "dev server",
+      "type": "npm",
+      "script": "dev",
+      "path": "",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "website"
+      },
+      "problemMatcher": {
+        "owner": "vite",
+        "source": "vite",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^\\s*(.*):(\\d+):(\\d+):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "(VITE v|vite v|restarting|page reload)",
+          "endsPattern": "(ready in|Local:\\s+http|error when starting dev server)"
+        }
+      }
+    },
+    {
+      "label": "stop dev server",
+      "type": "shell",
+      "command": "echo Dev server terminal left open - close the 'dev server' terminal to stop it.",
+      "presentation": { "reveal": "silent", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "install dependencies",
+      "type": "npm",
+      "script": "install",
+      "path": "",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "typecheck",
+      "type": "npm",
+      "script": "typecheck",
+      "path": "",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "lint",
+      "type": "npm",
+      "script": "lint",
+      "path": "",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "test",
+      "type": "npm",
+      "script": "test:ci",
+      "path": "",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "type": "npm",
+      "script": "build",
+      "path": "",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "audit (production deps)",
+      "type": "shell",
+      "command": "npm audit --omit=dev",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      // Everything you'd want green before pushing.
+      // `build` runs tsc itself, so this is types -> lint -> tests -> bundle.
+      "label": "checks: all",
+      "dependsOrder": "sequence",
+      "dependsOn": ["typecheck", "lint", "test", "build"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      // Builds, then serves build/ with `vite preview` on port 5000.
+      "label": "serve production build",
+      "type": "shell",
+      "command": "npm run build && npm run preview",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "website"
+      },
+      "problemMatcher": {
+        "owner": "vite-preview",
+        "pattern": {
+          "regexp": "^\\s*(.*):(\\d+):(\\d+):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "(vite v|building for production|transforming)",
+          "endsPattern": "(Local:\\s+http|preview server running|error during build)"
+        }
+      }
+    },
+    {
+      "label": "stop production preview",
+      "type": "shell",
+      "command": "echo Preview server left running - close the 'serve production build' terminal to stop it.",
+      "presentation": { "reveal": "silent", "panel": "shared" },
+      "problemMatcher": []
+    }
+  ]
+}
