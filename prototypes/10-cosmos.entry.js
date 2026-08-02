@@ -23,7 +23,20 @@ const A = window.__ASSETS || {};
 
 const _mq = new URLSearchParams(location.search).get('motion');
 const systemReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const reduce = _mq === 'full' ? false : _mq === 'reduced' ? true : systemReduce;
+let reduce = _mq === 'full' ? false : _mq === 'reduced' ? true : systemReduce;
+
+// Software (non-GPU-accelerated) WebGL renderers — SwiftShader, llvmpipe, the
+// "Microsoft Basic Render Driver" — can technically run this scene but at a
+// fraction of the frame rate, which reads as lag rather than a flight. Route
+// those visitors through the same single-frame reduced-motion path used for
+// prefers-reduced-motion, unless they've explicitly asked for full motion.
+function isSoftwareRenderer(gl) {
+  if (!gl) return false;
+  const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  const name = (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)) || '';
+  return /swiftshader|llvmpipe|software|basic render|microsoft basic/i.test(name);
+}
+let lowPower = false;
 
 /* ============================================================
    CONTENT (mirrors the real components)
@@ -121,6 +134,11 @@ document.querySelectorAll('#nav .links a[href^="#"], .badge[href^="#"]').forEach
 const canvas = document.getElementById('gl');
 let renderer = null;
 try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); } catch (e) { renderer = null; }
+
+if (renderer && isSoftwareRenderer(renderer.getContext())) {
+  lowPower = true;
+  if (_mq !== 'full') reduce = true;
+}
 
 const flight = { p: 0 };
 
@@ -855,11 +873,12 @@ if (!reduce) {
   });
 }
 
-if (systemReduce || _mq) {
+if (systemReduce || lowPower || _mq) {
   const btn = document.createElement('button');
   btn.id = 'motion-btn';
   btn.type = 'button';
   btn.textContent = reduce ? '▶  Enable full motion' : '⏸  Reduce motion';
+  btn.title = lowPower && reduce ? 'Full motion may be slow on this device (no GPU acceleration detected)' : '';
   btn.addEventListener('click', () => { location.search = reduce ? '?motion=full' : '?motion=reduced'; });
   document.body.appendChild(btn);
 }
