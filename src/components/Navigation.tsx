@@ -15,14 +15,11 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import { LightIcon, DarkIcon } from "./ThemeIcons";
 
 const drawerWidth = 240;
 
-function Navigation({ parentToChild, modeChange }: any) {
+function Navigation() {
   const { i18n, t } = useTranslation();
-
-  const { mode } = parentToChild;
 
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -117,23 +114,6 @@ function Navigation({ parentToChild, modeChange }: any) {
           >
             <MenuIcon />
           </IconButton>
-          <label
-            className={`theme-toggle-button ${mode === "dark" ? "dark" : ""}`}
-          >
-            <input
-              className="switch__input"
-              type="checkbox"
-              role="switch"
-              checked={mode === "dark"}
-              onChange={() => modeChange()}
-              aria-label={t("navigation.themeSwitch")}
-            />
-            <span className="switch__inner"></span>
-            <span className="switch__inner-icons">
-              <LightIcon className="switch__icon" />
-              <DarkIcon className="switch__icon" />
-            </span>
-          </label>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button
@@ -161,9 +141,9 @@ function Navigation({ parentToChild, modeChange }: any) {
               display: { xs: "block", sm: "none" },
               width: drawerWidth,
               overflowY: "hidden",
-              backgroundColor: mode === "light" ? "#fcfcfc" : "#0d1116",
+              backgroundColor: "#0d1116",
               "& span, & p": {
-                color: mode === "light" ? "#0d1116" : "#fcfcfc",
+                color: "#fcfcfc",
               },
             },
           }}

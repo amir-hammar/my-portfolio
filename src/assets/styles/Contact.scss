@@ -1,27 +1,11 @@
-.dark-mode {
-  .contact_wrapper {
-    .email-button {
-      background-color: #2e2d2d55 !important;
-      color: #fff !important;
+.contact_wrapper {
+  .email-button {
+    background-color: #2e2d2d55 !important;
+    color: #fff !important;
 
-      @media (min-width: 769px) {
-        &:hover {
-          background-color: #5000ca !important;
-          color: #fff !important;
-        }
-      }
-    }
-  }
-}
-
-.light-mode {
-  .contact_wrapper {
-    .email-button {
-      background-color: #ffffff !important;
-      color: #1e1d1d !important;
-
+    @media (min-width: 769px) {
       &:hover {
-        background-color: #000 !important;
+        background-color: #5000ca !important;
         color: #fff !important;
       }
     }

@@ -1,54 +1,33 @@
-.dark-mode {
-  .vertical-timeline-element-content {
-    background-color: #131516 !important;
-    color: rgb(232, 230, 227) !important;
+.vertical-timeline-element-content {
+  background-color: #131516 !important;
+  color: rgb(232, 230, 227) !important;
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    p,
-    span,
-    li {
-      color: inherit !important;
-    }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p,
+  span,
+  li {
+    color: inherit !important;
   }
+}
 
-  .vertical-timeline-element-icon {
-    color: #d1cdc7 !important;
-    transition: transform 0.5s ease;
-    background-color: #131516 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.vertical-timeline-element-content-arrow {
+  border-right-color: #303436 !important; // set the arrow to black
+}
 
-    img {
-      width: 80% !important;
-      height: 80% !important;
-      object-fit: contain !important;
-    }
-  }
+.vertical-timeline::before {
+  background-color: #181a1b !important; // set the timeline line to black;
+}
 
-  .vertical-timeline-element-content-arrow {
-    border-right-color: #303436 !important; // set the arrow to black
-  }
+.tech-chip {
+  background-color: #000 !important;
+  color: #fff !important;
 
-  .vertical-timeline::before {
-    background-color: #181a1b !important; // set the timeline line to black;
-  }
-
-  .click-arrow {
-    color: rgb(232, 230, 227) !important;
-  }
-
-  .tech-chip {
-    background-color: #000 !important;
+  span {
     color: #fff !important;
-
-    span {
-      color: #fff !important;
-    }
   }
 }
 
@@ -87,9 +66,12 @@
 }
 
 .vertical-timeline-element-icon {
-  color: #131516 !important;
+  color: #d1cdc7 !important;
   transition: transform 0.5s ease;
-  background-color: rgb(240, 240, 240) !important;
+  background-color: #131516 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 
   img {
     width: 80% !important;
@@ -185,7 +167,7 @@
   bottom: 10px;
   right: 10px;
   font-size: 1rem;
-  color: black !important;
+  color: rgb(232, 230, 227) !important;
   background-color: transparent;
 }
 
