@@ -11,6 +11,7 @@
   --line: rgba(122, 160, 255, 0.18);
   --mono: ui-monospace, Consolas, "SF Mono", Menlo, monospace;
   --nav-h: 64px;
+  --gold: #f2c94c;
 }
 
 .language-button {
@@ -54,90 +55,108 @@
   text-align: center;
 }
 
-.hero-wrap .socials {
-  display: flex;
-  gap: 14px;
-
-  a {
-    color: var(--white);
-    opacity: 0.75;
-    display: inline-flex;
-    transition: color 0.25s, opacity 0.25s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s;
-
-    &:hover {
-      color: var(--royal-hi);
-      opacity: 1;
-      transform: translateY(-4px) scale(1.12);
-      filter: drop-shadow(0 0 12px rgba(122, 160, 255, 0.8));
-    }
-  }
-
-  svg {
-    width: 21px;
-    height: 21px;
-  }
-}
-
-.hero-wrap .socials.rail {
-  position: absolute;
-  left: clamp(4px, 2vw, 26px);
-  top: 50%;
-  transform: translateY(-50%);
-  flex-direction: column;
-  gap: 22px;
-  z-index: 6;
-
-  &::after {
-    content: "";
-    width: 1px;
-    height: 64px;
-    margin: 6px auto 0;
-    background: linear-gradient(180deg, var(--line), transparent);
-  }
-}
-
 .portrait-stage {
   --arch-w: clamp(200px, 26vw, 320px);
   position: relative;
   width: var(--arch-w);
   height: var(--arch-w);
-  margin-bottom: clamp(18px, 3vw, 34px);
+  flex-shrink: 0;
   display: grid;
   place-items: center;
+  // the orbit rings are 1.72x this box and overflow visibly on every side;
+  // reserve that overflow as real clearance so they never cross into .hero-text
+  margin: 0 calc(var(--arch-w) * 0.38) clamp(24px, 4vw, 40px);
 }
 
+// GitHub/LinkedIn riding the orbit ellipse like two small moons — positioned
+// at the ellipse's left and bottom points (the SVG path is
+// "M 24 232 A 186 96 0 0 1 396 232" on a 420x420 viewBox), each drifting on
+// its own slow independent float so they don't move in lockstep.
+.moon {
+  position: absolute;
+  z-index: 6;
+  width: calc(var(--arch-w) * 0.155);
+  height: calc(var(--arch-w) * 0.155);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(122, 160, 255, 0.35), rgba(7, 12, 28, 0.88) 72%);
+  border: 1px solid var(--line);
+  color: var(--white);
+  box-shadow: 0 0 18px rgba(59, 107, 240, 0.45), 0 6px 18px rgba(0, 0, 0, 0.5);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+  animation: moon-float 6s ease-in-out infinite;
+
+  svg {
+    width: 46%;
+    height: 46%;
+  }
+
+  &:hover {
+    animation-play-state: paused;
+    transform: translate(-50%, -50%) scale(1.14);
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 26px rgba(242, 201, 76, 0.85), 0 6px 18px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.moon-github {
+  left: calc(var(--arch-w) * -0.2408);
+  top: calc(var(--arch-w) * 0.6773);
+  transform: translate(-50%, -50%);
+  animation-delay: 0s;
+}
+
+.moon-linkedin {
+  left: calc(var(--arch-w) * 0.3533);
+  top: calc(var(--arch-w) * 0.9953);
+  transform: translate(-50%, -50%);
+  animation-delay: -3s;
+}
+
+@keyframes moon-float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moon {
+    animation: none;
+  }
+}
+
+// A glow that hugs the avatar's own circumference, so the avatar itself
+// reads as the light source rather than sitting in front of a separate blob.
 .halo {
   position: absolute;
   z-index: 1;
   left: 50%;
   top: 50%;
-  width: calc(var(--arch-w) * 2.1);
+  width: calc(var(--arch-w) * 0.98);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(214, 228, 255, 0.12) 14%,
-    rgba(150, 182, 255, 0.07) 28%,
-    rgba(90, 130, 240, 0.035) 46%,
-    rgba(59, 107, 240, 0.012) 66%,
+    transparent 66%,
+    rgba(122, 160, 255, 0.55) 78%,
+    rgba(59, 107, 240, 0.32) 90%,
     transparent 100%
   );
-  filter: blur(34px);
+  filter: blur(14px);
   pointer-events: none;
+  animation: halo-pulse 5s ease-in-out infinite;
+}
 
-  &::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 42%;
-    aspect-ratio: 1;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.06) 45%, transparent 100%);
-    filter: blur(22px);
+@keyframes halo-pulse {
+  0%, 100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.035); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halo {
+    animation: none;
   }
 }
 
@@ -153,9 +172,9 @@
   transform: translate(-50%, -50%);
   display: block;
   pointer-events: none;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.06), 0 0 46px rgba(140, 180, 255, 0.55),
-    0 20px 46px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.05), 0 0 32px rgba(140, 180, 255, 0.7),
+    0 0 70px rgba(90, 130, 240, 0.55), 0 20px 46px rgba(0, 0, 0, 0.6);
 }
 
 .orbit {
@@ -192,8 +211,8 @@
 
 .badge {
   position: absolute;
-  right: calc(var(--arch-w) * -0.3);
-  top: calc(var(--arch-w) * 0.06);
+  right: calc(var(--arch-w) * -0.25);
+  top: calc(var(--arch-w) * 0.07);
   width: clamp(84px, 11vw, 118px);
   aspect-ratio: 1;
   z-index: 6;
@@ -249,9 +268,19 @@
   }
 }
 
+.hero-body {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+}
+
+.hero-text {
+  text-align: left;
+}
+
 h1.name {
-  font-size: clamp(44px, 10.5vw, 128px);
-  line-height: 0.88;
+  font-size: clamp(40px, 8vw, 96px);
+  line-height: 0.94;
   font-weight: 700;
   letter-spacing: -0.05em;
   margin: 0;
@@ -271,6 +300,7 @@ h1.name {
   margin-top: 26px;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 11px;
 
   img {
@@ -312,6 +342,18 @@ h1.name {
     &::after {
       display: none;
     }
+  }
+
+  .hero-body {
+    flex-direction: column;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .school {
+    justify-content: center;
   }
 
   .badge {

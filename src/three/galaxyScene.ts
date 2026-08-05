@@ -110,6 +110,7 @@ export interface GalaxyScene {
   setPointer: (x: number, y: number) => void;
   setFlight: (p: number) => void;
   setVelocity: (pxPerSec: number) => void;
+  onRegionChange: (cb: (name: string) => void) => void;
   dispose: () => void;
   isSoftware: boolean;
 }
@@ -313,16 +314,18 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
 
   scene.fog = new THREE.FogExp2(0x03050d, 0.0006);
   const REGIONS = [
-    { fog: 0x030509, density: 0.0005, tint: 0x070c1e, amt: 0.08, bright: 0.96 },
-    { fog: 0x0d1938, density: 0.0009, tint: 0x1a3070, amt: 0.26, bright: 1.02 },
-    { fog: 0x101f4a, density: 0.0012, tint: 0x24408f, amt: 0.3, bright: 0.98 },
-    { fog: 0x020308, density: 0.0004, tint: 0x040814, amt: 0.16, bright: 0.78 },
-    { fog: 0x0d1938, density: 0.0008, tint: 0x27417f, amt: 0.2, bright: 0.96 },
+    { fog: 0x030509, density: 0.0005, tint: 0x070c1e, amt: 0.08, bright: 0.96, name: "GALACTIC CORE" },
+    { fog: 0x0d1938, density: 0.0009, tint: 0x1a3070, amt: 0.26, bright: 1.02, name: "STAR CLUSTER" },
+    { fog: 0x101f4a, density: 0.0012, tint: 0x24408f, amt: 0.3, bright: 0.98, name: "NEBULA" },
+    { fog: 0x020308, density: 0.0004, tint: 0x040814, amt: 0.16, bright: 0.78, name: "DEEP FIELD" },
+    { fog: 0x0d1938, density: 0.0008, tint: 0x27417f, amt: 0.2, bright: 0.96, name: "BINARY SYSTEM" },
   ];
   const cA = new THREE.Color();
   const cB = new THREE.Color();
   const tA = new THREE.Color();
   const tB = new THREE.Color();
+  let lastRegionName = "";
+  let onRegionChange: ((name: string) => void) | null = null;
 
   function applyRegion() {
     const a = REGIONS[currentLeg];
@@ -337,6 +340,12 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
     u.uTint.value.copy(tA).lerp(tB, legEase);
     u.uTintAmt.value = THREE.MathUtils.lerp(a.amt, b.amt, legEase);
     u.uBright.value = THREE.MathUtils.lerp(a.bright, b.bright, legEase);
+
+    const name = (legEase < 0.5 ? a : b).name;
+    if (name !== lastRegionName) {
+      lastRegionName = name;
+      onRegionChange?.(name);
+    }
   }
 
   const starCv = document.createElement("canvas");
@@ -744,6 +753,9 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
     },
     setVelocity(pxPerSec: number) {
       vel.v = Math.min(1.5, Math.abs(pxPerSec) / 3400);
+    },
+    onRegionChange(cb: (name: string) => void) {
+      onRegionChange = cb;
     },
     dispose() {
       SKY.geometry.dispose();

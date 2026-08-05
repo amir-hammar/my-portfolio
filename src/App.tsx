@@ -11,6 +11,7 @@ import {
 } from "./components";
 import Timeline from "./components/Timeline/Timeline";
 import GalaxyHero from "./components/GalaxyHero";
+import MissionHud from "./components/MissionHud";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import "./index.scss";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -57,6 +58,7 @@ function App() {
       <Router>
         <div className="main-container">
           <GalaxyHero />
+          <MissionHud />
           <Navigation />
           <Main />
           <Expertise />

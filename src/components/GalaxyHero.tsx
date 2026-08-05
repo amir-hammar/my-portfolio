@@ -49,6 +49,9 @@ function GalaxyHero() {
       velocityTrigger = ScrollTrigger.create({
         onUpdate: (self) => scene.setVelocity(self.getVelocity()),
       });
+      scene.onRegionChange((name) => {
+        window.dispatchEvent(new CustomEvent("cosmos:region", { detail: name }));
+      });
       raf = requestAnimationFrame(tick);
     }
 
