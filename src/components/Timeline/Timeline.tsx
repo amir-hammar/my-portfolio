@@ -33,9 +33,12 @@ function Timeline() {
   }, []);
 
   return (
-    <div id="history">
+    <div id="history" className="section-panel">
       <div className="items-container">
-        <h1>{t("career.title")}</h1>
+        <header className="section-head">
+          <span className="section-index">02</span>
+          <h1>{t("career.title")}</h1>
+        </header>
         <VerticalTimeline>
           <TimelineItem
             index={0}

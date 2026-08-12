@@ -11,10 +11,13 @@ function Contact() {
   };
 
   return (
-    <div id="contact">
+    <div id="contact" className="section-panel">
       <div className="items-container">
         <div className="contact_wrapper">
-          <h1>{t("contact.title")}</h1>
+          <header className="section-head">
+            <span className="section-index">04</span>
+            <h1>{t("contact.title")}</h1>
+          </header>
           <p>
             {t("contact.description")}
           </p>

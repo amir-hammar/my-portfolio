@@ -266,19 +266,36 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
     scene.add(pts);
     starMats.push(m);
   }
-  starField(14000, 1000, 3000, 0.6, 2.2);
-  starField(7500, 1500, 3200, 1.1, 3.6);
-  starField(3400, 2200, 3400, 1.8, 5.6);
-  starField(1400, 3000, 3600, 2.6, 8.5);
+  // Depth is stretched to ~6000 so the field still has stars ahead of the
+  // camera at the end of the (now much longer) forward drift — at the old 3000
+  // the last section flew out the back of the starfield into empty space.
+  //
+  // Counts are scaled with depth to hold stars-per-volume exactly where it was.
+  // That matters: on-screen brightness depends on density near the camera, not
+  // on the total, so this keeps the sky looking the way it already did instead
+  // of washing it out. Extending depth WITHOUT re-scaling (which is what I
+  // tried first) thins the field and actually reduces parallax.
+  starField(28000, 1000, 6000, 0.6, 2.2);
+  starField(14500, 1500, 6200, 1.1, 3.6);
+  starField(6400, 2200, 6400, 1.8, 5.6);
+  starField(2600, 3000, 6600, 2.6, 8.5);
+  // Near field. Parallax is what actually sells motion, and parallax needs
+  // things CLOSE to the camera — the four layers above all sit far enough away
+  // that a lateral step barely shifts them. These are tight to the flight axis
+  // and large, so they sweep past the edges of frame instead of creeping.
+  starField(2600, 520, 6000, 3.2, 11);
 
   /* ============================================================
      FLIGHT — pure cardinal moves between fixed destinations.
      The camera NEVER rotates: it always faces -Z, and travel is a straight
      translation along exactly one world axis per section.
      ============================================================ */
-  const STEP_W = 190;
-  const STEP_H = 135;
-  const DRIFT = 1150;
+  // Lateral legs are ~1.8x their old size and the forward drift ~2.3x. The
+  // previous values moved the camera 190 units sideways while the nearest stars
+  // sat 1000+ away, which is an angular shift too small to register as travel.
+  const STEP_W = 340;
+  const STEP_H = 250;
+  const DRIFT = 2600;
   const driftZ = (p: number) => -DRIFT * THREE.MathUtils.clamp(p, 0, 1);
 
   const STOPS = [

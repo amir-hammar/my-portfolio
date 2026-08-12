@@ -1,162 +1,150 @@
 .projects-container {
   display: flex;
   flex-direction: column;
-  padding: 5% 10%;
   text-align: left;
 }
 
-.projects-container .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 50px;
-}
-
-.projects-container .projects-grid .project {
-  text-align: left;
-}
-
-.project h2:hover {
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out;
-}
-
-.zoom {
-  border-radius: 5px;
-  transition: transform 0.2s;
-  margin: 0 auto;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+// One project per row, full width — not a grid. The image is the hero of each
+// row and spans the entire horizontal space.
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 7vw, 96px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: project;
 }
 
 .project {
-  .zoom {
-    display: flex;
-    justify-content: center;
-    object-fit: cover;
-    cursor: pointer;
-    width: 100%;
-
-    &:nth-child(odd) {
-      .zoom {
-        &:hover {
-          transform: scale(1.05) translateX(15px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); // Increased shadow size and opacity
-        }
-      }
-    }
-
-    &:nth-child(even) {
-      .zoom {
-        &:hover {
-          transform: scale(1.05) translateX(-15px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-        }
-      }
-    }
-  }
-}
-
-.image-container {
-  position: relative;
-  display: block;
-  width: 100%;
-  margin: 0 auto;
-
-  img {
-    border-radius: 5px;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-
-    &:first-child {
-      width: 100% !important;
-      display: block;
-
-      &:hover {
-        @media (min-width: 769px) {
-          transform: scale(1.05);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-        }
-        
-
-        & + img {
-          @media (min-width: 769px) {
-            transform: scale(1.05) translateY(20%);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-          }
-          
-        }
-      }
-    }
-
-    &:last-child {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      width: 30% !important;
-      transform: translateY(15%);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 2;
-
-      &:hover {
-        @media (min-width: 769px) {
-          transform: scale(1.05) translateY(15%);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-        }
-      }
-    }
-  }
-}
-
-.vertical-image-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(18px, 2.4vw, 30px);
+}
+
+.project-media {
+  position: relative;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
+  // A consistent letterbox keeps every row the same height regardless of the
+  // source image's own ratio, so the list reads as a rhythm rather than a
+  // ragged stack.
+  aspect-ratio: 16 / 7;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(122, 160, 255, 0.16);
+  background: rgba(4, 8, 20, 0.6);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
 
-  img {
-    width: 70% !important;
-    margin: 0 auto;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-    border-radius: 5px;
+  > img,
+  > video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-    &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-    }
+  // Gradient scrim along the bottom so the inset shot and any bright image
+  // never fight the copy directly beneath the frame.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 45%;
+    background: linear-gradient(to top, rgba(3, 5, 13, 0.75), transparent);
+    pointer-events: none;
+  }
+
+  &:hover > img,
+  &:hover > video {
+    transform: scale(1.04);
   }
 }
 
-@media screen {
-  @media (max-width: 700px) {
-    .projects-container {
-      display: block;
-      padding-left: 5%;
-      padding-right: 5%;
-    }
+// Secondary shot, floated over the bottom-right of the primary one.
+.project-inset {
+  position: absolute;
+  right: 3%;
+  bottom: 7%;
+  z-index: 2;
+  width: 26%;
+  border-radius: 10px;
+  border: 1px solid rgba(122, 160, 255, 0.28);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 
-    .projects-container .projects-grid {
-      display: block;
-    }
+  .project-media:hover & {
+    transform: translateY(-8px) scale(1.05);
+  }
+}
 
-    .projects-container .projects-grid .project {
-      padding-bottom: 5%;
-    }
+.project-body {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 2vw, 26px);
+}
 
-    .zoom:hover {
-      transform: none;
-    }
+.project-no {
+  flex-shrink: 0;
+  padding-top: 0.35em;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--royal-hi);
+  opacity: 0.8;
+}
 
-    .image-container {
-      &:hover {
-        transform: none;
-        box-shadow: none;
-      }
-      img:last-child {
-        width: 40% !important;
-      }
-    }
+.project-copy {
+  flex: 1;
+  min-width: 0;
+
+  h2 {
+    margin: 0 0 0.5em;
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  p {
+    margin: 0;
+    // Long prose at full panel width is hard to track; cap the measure while
+    // the image above stays edge to edge.
+    max-width: 78ch;
+    color: var(--muted);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 700px) {
+  .project-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .project-inset {
+    width: 34%;
+  }
+
+  .project-body {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .project-no {
+    padding-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-media > img,
+  .project-media > video,
+  .project-inset {
+    transition: none;
+  }
+
+  .project-media:hover > img,
+  .project-media:hover > video,
+  .project-media:hover .project-inset {
+    transform: none;
   }
 }

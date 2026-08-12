@@ -42,7 +42,11 @@ function GalaxyHero() {
           trigger: document.body,
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.8,
+          // Was 1.8, which lagged far enough behind the wheel that the sky
+          // looked static while scrolling and only drifted after you stopped.
+          // 0.7 still smooths the input without breaking the sense that your
+          // scroll is flying the camera.
+          scrub: 0.7,
         },
         onUpdate: () => scene.setFlight(flight.p),
       });

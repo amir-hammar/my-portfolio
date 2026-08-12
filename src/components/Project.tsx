@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import ScrollTrigger from "gsap/dist/ScrollTrigger";
+// Named import: the default export of gsap/dist/ScrollTrigger is not the
+// plugin class, so ScrollTrigger.create() is undefined on it.
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../assets/styles/Project.scss";
 import { useTranslation } from "react-i18next";
 
@@ -18,170 +20,146 @@ import portfolio from "../assets/images/projects/portfolio.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type ProjectEntry = {
+  /** i18n key under `projects.*` */
+  id: string;
+  /** Primary full-bleed image. Omitted for the video entry. */
+  image?: string;
+  /** Optional second shot, insetted over the primary one. */
+  inset?: string;
+  video?: { src: string; poster: string };
+};
+
+const PROJECTS: ProjectEntry[] = [
+  { id: "digiclipse", image: digiclipseMain, inset: digiclipseShowcase },
+  { id: "arcade", video: { src: arcadeVideo, poster: arcadeThumbnail } },
+  { id: "aspire", image: aspire },
+  { id: "database", image: database },
+  { id: "voiceTranslator", image: voiceTranslator },
+  { id: "dataUpdater", image: sscMain, inset: sscSettings },
+  { id: "classManagement", image: sga },
+  { id: "portfolio", image: portfolio },
+];
+
 function Project() {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const listRef = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
-    let playTimeout: NodeJS.Timeout;
+    const video = videoRef.current;
+    if (!video) return;
 
-    if (videoRef.current) {
-      gsap.to(videoRef.current, {
-        scrollTrigger: {
-          trigger: videoRef.current,
-          start: "top 80%",
-          end: isMobile ? "bottom 15%" : "bottom 25%",
-          onEnter: () => {
-            clearTimeout(playTimeout);
-            playTimeout = setTimeout(() => {
-              videoRef.current?.play();
-            }, 100);
-          },
-          onLeave: () => {
-            clearTimeout(playTimeout);
-            videoRef.current?.pause();
-          },
-          onEnterBack: () => {
-            clearTimeout(playTimeout);
-            playTimeout = setTimeout(() => {
-              videoRef.current?.play();
-            }, 100);
-          },
-          onLeaveBack: () => {
-            clearTimeout(playTimeout);
-            videoRef.current?.pause();
-          },
-        },
-      });
-    }
+    // Play only while the clip is actually on screen. The short delay debounces
+    // a fast scroll past it, which would otherwise start and immediately pause
+    // playback. Previously this effect had no dependency array, so it re-ran and
+    // re-created its ScrollTrigger on every single render.
+    let playTimeout: ReturnType<typeof setTimeout>;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    const play = () => {
+      clearTimeout(playTimeout);
+      playTimeout = setTimeout(() => {
+        video.play().catch(() => {
+          /* autoplay refused — poster stays up, which is fine */
+        });
+      }, 100);
+    };
+    const pause = () => {
+      clearTimeout(playTimeout);
+      video.pause();
+    };
+
+    const trigger = ScrollTrigger.create({
+      trigger: video,
+      start: "top 80%",
+      end: isMobile ? "bottom 15%" : "bottom 25%",
+      onEnter: play,
+      onEnterBack: play,
+      onLeave: pause,
+      onLeaveBack: pause,
+    });
+
+    // ScrollTrigger caches each trigger's document position at creation time.
+    // Every row here loads its image lazily, so this list's height keeps growing
+    // after that measurement and pushes the triggers below it out of place.
+    // GalaxyHero already refreshes on canvas resize, but its canvas is
+    // viewport-sized and so never reacts to content reflow. Re-measure when the
+    // list's own box changes (a ResizeObserver also fires once on subscribe) and
+    // once more after every subresource has settled.
+    let refreshTimer: ReturnType<typeof setTimeout>;
+    const scheduleRefresh = () => {
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 120);
+    };
+
+    const ro = new ResizeObserver(scheduleRefresh);
+    if (listRef.current) ro.observe(listRef.current);
+
+    const loaded = document.readyState === "complete";
+    if (!loaded) window.addEventListener("load", scheduleRefresh);
 
     return () => {
       clearTimeout(playTimeout);
+      clearTimeout(refreshTimer);
+      ro.disconnect();
+      window.removeEventListener("load", scheduleRefresh);
+      trigger.kill();
     };
-  });
+  }, []);
 
   return (
-    <div className="projects-container" id="projects">
-      <h1>{t("projects.title")}</h1>
-      <div className="projects-grid">
-        <div className="project">
-          <div className="image-container">
-            <img
-              src={digiclipseMain}
-              className="zoom"
-              alt="DigiClipse interface"
-              width="50%"
-            />
-            <img
-              src={digiclipseShowcase}
-              className="zoom"
-              alt="DigiClipse code"
-              width="50%"
-            />
-          </div>
-          <div className="project-title">
-            <h2>{t("projects.digiclipse.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.digiclipse.description") }}/>
-        </div>
-        <div className="project">
-          <video
-            ref={videoRef}
-            src={arcadeVideo}
-            className="zoom"
-            poster={arcadeThumbnail}
-            loop
-            muted
-            playsInline
-          />
-          <div className="project-title">
-            <h2>{t("projects.arcade.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.arcade.description") }}/>
-        </div>
-        <div className="project">
-          <img
-            src={aspire}
-            className="zoom"
-            alt="thumbnail"
-            width="100%"
-          />
-          <div className="project-title">
-            <h2>{t("projects.aspire.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.aspire.description") }}/>
-        </div>
-        <div className="project">
-          <img
-            src={database}
-            className="zoom"
-            alt="thumbnail"
-            width="100%"
-          />
-          <div className="project-title">
-            <h2>{t("projects.database.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.database.description") }}/>
-        </div>
-        <div className="project">
-          <img
-            src={voiceTranslator}
-            className="zoom"
-            alt="thumbnail"
-            width="100%"
-          />
-          <div className="project-title">
-            <h2>{t("projects.voiceTranslator.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.voiceTranslator.description") }}/>
-        </div>
-        <div className="project">
-          <div className="image-container">
-            <img
-              src={sscMain}
-              className="zoom main-image"
-              alt="Main project view"
-              width="100%"
-            />
-            <img
-              src={sscSettings}
-              className="zoom"
-              alt="Project detail 1"
-              width="100%"
-            />
-          </div>
-          <div className="project-title">
-            <h2>{t("projects.dataUpdater.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.dataUpdater.description") }}/>
-        </div>
-        <div className="project">
-          <img
-            src={sga}
-            className="zoom"
-            alt="thumbnail"
-            width="100%"
-          />
-          <div className="project-title">
-            <h2>{t("projects.classManagement.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.classManagement.description") }}/>
-        </div>
-        <div className="project">
-          <img
-            src={portfolio}
-            className="zoom"
-            alt="thumbnail"
-            width="100%"
-          />
-          <div className="project-title">
-            <h2>{t("projects.portfolio.title")}</h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: t("projects.portfolio.description") }}/>
-        </div>
-      </div>
-    </div>
+    <section className="projects-container section-panel" id="projects">
+      <header className="section-head">
+        <span className="section-index">03</span>
+        <h1>{t("projects.title")}</h1>
+      </header>
+
+      <ol className="projects-list" ref={listRef}>
+        {PROJECTS.map((project, i) => (
+          <li className="project" key={project.id}>
+            <div className="project-media">
+              {project.video ? (
+                <video
+                  ref={videoRef}
+                  src={project.video.src}
+                  poster={project.video.poster}
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img src={project.image} alt="" loading="lazy" decoding="async" />
+              )}
+
+              {project.inset && (
+                <img
+                  className="project-inset"
+                  src={project.inset}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </div>
+
+            <div className="project-body">
+              <span className="project-no">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="project-copy">
+                <h2>{t(`projects.${project.id}.title`)}</h2>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: t(`projects.${project.id}.description`),
+                  }}
+                />
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
 

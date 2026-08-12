@@ -22,6 +22,7 @@ i18n
             career: "Career",
             projects: "Projects",
             contact: "Contact",
+            talk: "Let's talk",
           },
 
           expertise: {
@@ -33,6 +34,7 @@ i18n
                 java: "Java",
                 c: "C",
                 cpp: "C++",
+                csharp: "C#",
                 javascript: "JavaScript",
                 typescript: "TypeScript",
                 apiIntegration: "API Integration",
@@ -258,6 +260,7 @@ i18n
             career: "Carrière",
             projects: "Projets",
             contact: "Contact",
+            talk: "Discutons",
           },
 
           expertise: {
@@ -269,6 +272,7 @@ i18n
                 java: "Java",
                 c: "C",
                 cpp: "C++",
+                csharp: "C#",
                 javascript: "JavaScript",
                 typescript: "TypeScript",
                 apiIntegration: "Intégration d'API",

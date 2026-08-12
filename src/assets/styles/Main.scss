@@ -1,3 +1,58 @@
+@use "sass:math";
+
+// ─── Orbit ring geometry ──────────────────────────────────────────────────
+// Everything that sits "on the ring" is placed from these functions rather
+// than from hand-tuned pixel offsets, so the anchors can't drift out of sync
+// with the SVG again.
+//
+// The two arcs in Main.tsx are `A 186 96 0 0 1` on a `0 0 420 420` viewBox,
+// i.e. one ellipse centred at viewBox (210, 232) with rx=186, ry=96. `.orbit`
+// renders that viewBox at (1.72 x --arch-w) square, centred on the stage, and
+// carries `rotate(-9deg)`.
+//
+// The previous values were eyeballed because an earlier analytic attempt
+// missed by 40-100px. That attempt was wrong for one specific reason: it
+// mapped viewBox coords through getBoundingClientRect(), and a rotated
+// element's bounding rect is the axis-aligned box of the *rotated* shape —
+// so it both inflated the scale and dropped the rotation entirely. The
+// parametric form below applies the tilt explicitly and matches the rendered
+// path (verified against getScreenCTM()).
+$ring-unit: math.div(1.72, 420); // viewBox unit -> --arch-w unit
+$ring-rx: 186 * $ring-unit;
+$ring-ry: 96 * $ring-unit;
+$ring-tilt: -9deg;
+
+// Ellipse centre: the stage centre, plus the arc's (0, +22) viewBox offset
+// carried through the same rotation.
+$ring-cx: 0.5 - (22 * $ring-unit) * math.sin($ring-tilt);
+$ring-cy: 0.5 + (22 * $ring-unit) * math.cos($ring-tilt);
+
+// Point on the ring at parameter $t, in --arch-w units from the stage's
+// top-left. $t is the ellipse parameter, NOT the visual angle from the
+// centre — for a tilted ellipse the two differ.
+@function ring-left($t) {
+  @return $ring-cx + $ring-rx * math.cos($t) * math.cos($ring-tilt) -
+    $ring-ry * math.sin($t) * math.sin($ring-tilt);
+}
+
+@function ring-top($t) {
+  @return $ring-cy + $ring-rx * math.cos($t) * math.sin($ring-tilt) +
+    $ring-ry * math.sin($t) * math.cos($ring-tilt);
+}
+
+// The parameters below were chosen so the two icons land on a single shared
+// `left` (a vertical chord of the ellipse) clear of the avatar, and the badge
+// sits diagonally opposite on the upper right.
+$t-github: -137.25deg; // -> left -0.080, top 0.413
+$t-linkedin: 146.59deg; // -> left -0.080, top 0.902
+// Swung out toward the ring's rightmost point. At -34.39deg the badge cleared
+// the avatar by only ~9px and read as stuck to it; this leaves ~44px.
+$t-badge: -12deg; // -> left  1.238, top 0.390
+// Narrow screens: the badge's width is clamped in px while --arch-w keeps
+// shrinking, so the far-right anchor starts overhanging the viewport. Slide it
+// further around the same ring rather than off it.
+$t-badge-sm: -60deg; // -> left  0.837, top 0.193
+
 :root {
   --hue: 223;
   --primary: hsl(var(--hue), 90%, 50%);
@@ -14,24 +69,85 @@
   --gold: #f2c94c;
 }
 
-.language-button {
-  background: none !important; // Override MUI default
-  border: 1px solid #fff !important;
-  color: #fff !important;
-  padding: 0.5rem 1rem !important;
-  border-radius: 4px !important;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: unset !important; // Override MUI default width
+// Segmented pill toggle — replaces the old single "shows the OTHER language"
+// button. Both options are visible at once with a sliding highlight, which
+// reads as a real switch rather than a button whose label is ambiguous
+// about whether it names the current or the target language.
+.lang-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 12px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(7, 12, 28, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.25s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-    transform: scale(1.05);
+    border-color: var(--royal-hi);
   }
 
-  @media (max-width: 768px) {
-    padding: 0.3rem 0.8rem !important;
-    font-size: 0.9rem !important;
+  button {
+    position: relative;
+    z-index: 1;
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    min-width: 34px;
+    padding: 5px 11px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    transition: color 0.3s ease;
+
+    &.active {
+      color: var(--white);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--royal-hi);
+      outline-offset: 2px;
+      border-radius: 999px;
+    }
+  }
+
+  &-thumb {
+    position: absolute;
+    z-index: 0;
+    top: 3px;
+    left: 3px;
+    bottom: 3px;
+    width: calc(50% - 3px);
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--royal), var(--royal-hi));
+    box-shadow: 0 0 12px rgba(59, 107, 240, 0.55);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &--fr &-thumb {
+    transform: translateX(100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &-thumb {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    margin-left: 6px;
+    button {
+      min-width: 28px;
+      padding: 4px 8px;
+      font-size: 10px;
+    }
   }
 }
 
@@ -101,23 +217,31 @@
   }
 }
 
+// Both icons share the same `left`, so they stack in a vertical column on
+// the left of the ring — GitHub where the ring crosses going up, LinkedIn
+// where it crosses going down. See the ring-left/ring-top definitions at the
+// top of this file.
 .moon-github {
-  left: calc(var(--arch-w) * -0.2408);
-  top: calc(var(--arch-w) * 0.6773);
+  left: calc(var(--arch-w) * #{ring-left($t-github)});
+  top: calc(var(--arch-w) * #{ring-top($t-github)});
   transform: translate(-50%, -50%);
   animation-delay: 0s;
 }
 
 .moon-linkedin {
-  left: calc(var(--arch-w) * 0.3533);
-  top: calc(var(--arch-w) * 0.9953);
+  left: calc(var(--arch-w) * #{ring-left($t-linkedin)});
+  top: calc(var(--arch-w) * #{ring-top($t-linkedin)});
   transform: translate(-50%, -50%);
   animation-delay: -3s;
 }
 
+// Float amplitude is deliberately small. At the old -8px the icons spent most
+// of the cycle visibly off the ring stroke, which read as "not centered on the
+// ring" even though their resting position was exact. 3px keeps the drift
+// inside the ring's own stroke+glow width, so they stay visually seated on it.
 @keyframes moon-float {
   0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-  50% { transform: translate(-50%, -50%) translateY(-8px); }
+  50% { transform: translate(-50%, -50%) translateY(-3px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -209,10 +333,13 @@
   }
 }
 
+// Anchored to the ring like the two moons (was `right`/`top`, which put it on
+// no particular curve and read as out of line next to them).
 .badge {
   position: absolute;
-  right: calc(var(--arch-w) * -0.25);
-  top: calc(var(--arch-w) * 0.07);
+  left: calc(var(--arch-w) * #{ring-left($t-badge)});
+  top: calc(var(--arch-w) * #{ring-top($t-badge)});
+  transform: translate(-50%, -50%);
   width: clamp(84px, 11vw, 118px);
   aspect-ratio: 1;
   z-index: 6;
@@ -357,7 +484,8 @@ h1.name {
   }
 
   .badge {
-    right: calc(var(--arch-w) * -0.16);
+    left: calc(var(--arch-w) * #{ring-left($t-badge-sm)});
+    top: calc(var(--arch-w) * #{ring-top($t-badge-sm)});
     width: 78px;
   }
 }
