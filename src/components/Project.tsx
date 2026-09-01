@@ -6,17 +6,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../assets/styles/Project.scss";
 import { useTranslation } from "react-i18next";
 
-import digiclipseMain from "../assets/images/projects/digiclipse_main.jpg";
-import digiclipseShowcase from "../assets/images/projects/digiclipse_showcase.png";
+import digiclipseMain from "../assets/images/projects/digiclipse_main.webp";
+import digiclipseShowcase from "../assets/images/projects/digiclipse_showcase.webp";
 import arcadeVideo from "../assets/images/projects/arcade.mp4";
-import arcadeThumbnail from "../assets/images/projects/arcade_thumbnail.png";
-import aspire from "../assets/images/projects/aspire.jpg";
-import database from "../assets/images/projects/database.jpg";
-import voiceTranslator from "../assets/images/projects/voice_translator.jpg";
-import sscMain from "../assets/images/projects/ssc_main.png";
-import sscSettings from "../assets/images/projects/ssc_settings.png";
-import sga from "../assets/images/projects/sga.png";
-import portfolio from "../assets/images/projects/portfolio.png";
+import arcadeThumbnail from "../assets/images/projects/arcade_thumbnail.webp";
+import aspire from "../assets/images/projects/aspire.webp";
+import database from "../assets/images/projects/database.webp";
+import voiceTranslator from "../assets/images/projects/voice_translator.webp";
+import sscMain from "../assets/images/projects/ssc_main.webp";
+import sscSettings from "../assets/images/projects/ssc_settings.webp";
+import sga from "../assets/images/projects/sga.webp";
+import portfolio from "../assets/images/projects/portfolio.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 

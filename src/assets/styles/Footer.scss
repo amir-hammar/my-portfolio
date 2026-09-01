@@ -1,15 +1,84 @@
 footer {
-    text-align: center;
-    padding-top: 50px;
-    padding-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 60px 20px 70px;
+  text-align: center;
+}
 
-    svg {
-        width: 1.1em !important;
-        height: 1.1em !important;
-        margin-right: 10px;
-    }
+.footer-socials {
+  display: flex;
+  gap: 16px;
+}
 
-    p {
-        font-size: 0.8em;
+// Same treatment as the two orbiting icons in the hero (`.moon` in Main.scss):
+// radial-lit sphere, hairline rim, blue bloom, gold on hover. Restated here
+// rather than shared, because `.moon` also carries the absolute positioning and
+// the float animation that place it on the orbit ring - none of which applies
+// to a footer sitting in normal flow.
+.social-orb {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(122, 160, 255, 0.35),
+    rgba(7, 12, 28, 0.88) 72%
+  );
+  border: 1px solid var(--line);
+  color: var(--white);
+  box-shadow: 0 0 18px rgba(59, 107, 240, 0.45), 0 6px 18px rgba(0, 0, 0, 0.5);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease,
+    box-shadow 0.3s ease, color 0.3s ease;
+
+  svg {
+    width: 46%;
+    height: 46%;
+  }
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-4px) scale(1.1);
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 26px rgba(242, 201, 76, 0.85), 0 6px 18px rgba(0, 0, 0, 0.5);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 4px;
+  }
+}
+
+.footer-mail {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--white);
+  }
+}
+
+.footer-note {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-orb {
+    transition: border-color 0.3s ease, color 0.3s ease;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
     }
+  }
 }

@@ -1,10 +1,12 @@
-// Galaxy scroll-flight: a from-scratch shader sky, four star field layers, a
-// scroll-driven camera flight between fixed per-section "destinations"
-// (globular cluster, nebula, constellation, binary), warp streaks, and a few
-// subtle hero-only shooting stars. Ported from the standalone prototype at
-// prototypes/10-cosmos.entry.js (see prototypes/README.md).
+// Galaxy scroll-flight: a from-scratch shader sky, five star field layers, a
+// scroll-driven camera flight, warp streaks, and a few subtle hero-only
+// shooting stars. Ported from the standalone prototype at
+// prototypes/10-cosmos.entry.js (see prototypes/README.md). There are
+// deliberately no "destination" objects at the section stops - the globular
+// cluster, nebula, constellation and binary pair were removed on request, so
+// the flight is pure travel through the star field.
 //
-// The camera never rotates — it always faces -Z, and travel between stops is
+// The camera never rotates - it always faces -Z, and travel between stops is
 // a straight translation along exactly one world axis at a time. `setFlight`
 // is driven externally (GalaxyHero wires it to a GSAP ScrollTrigger scrubbing
 // the whole document), not by an internal clock.
@@ -52,17 +54,24 @@ const NOISE = /* glsl */ `
 const STAR_VERT = /* glsl */ `
   attribute float aSize; attribute float aSeed; attribute vec3 aColor;
   uniform float uTime, uPixelRatio;
-  varying vec3 vColor; varying float vTwinkle;
+  varying vec3 vColor; varying float vTwinkle; varying float vNear;
   void main() {
     vec4 mv = modelViewMatrix * vec4(position, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = aSize * uPixelRatio * (420.0 / max(-mv.z, 1.0));
+    // Clamped, and faded out at very close range. Unclamped this is
+    // aSize * uPixelRatio * 420 at 1 unit away - an ~8000px additive quad.
+    // A handful of those covering the screen is enough to stall the frame,
+    // which is what made fast scrolling feel like it froze once the near
+    // field layer started flying stars past the camera.
+    float dist = max(-mv.z, 1.0);
+    gl_PointSize = min(aSize * uPixelRatio * (420.0 / dist), 48.0);
+    vNear = smoothstep(6.0, 40.0, dist);
     vColor = aColor;
     vTwinkle = 0.60 + 0.40 * sin(uTime * (1.0 + aSeed * 2.6) + aSeed * 62.0);
   }`;
 
 const STAR_FRAG = /* glsl */ `
-  varying vec3 vColor; varying float vTwinkle;
+  varying vec3 vColor; varying float vTwinkle; varying float vNear;
   void main() {
     vec2 c = gl_PointCoord - 0.5;
     float r = length(c);
@@ -71,7 +80,7 @@ const STAR_FRAG = /* glsl */ `
     float halo = pow(smoothstep(0.5, 0.0, r), 1.25) * 0.30;
     float sx = max(0.0, 1.0 - abs(c.y) * 34.0) * max(0.0, 1.0 - abs(c.x) * 2.2);
     float sy = max(0.0, 1.0 - abs(c.x) * 34.0) * max(0.0, 1.0 - abs(c.y) * 2.2);
-    float a = (core + halo + (sx + sy) * 0.42) * vTwinkle;
+    float a = (core + halo + (sx + sy) * 0.42) * vTwinkle * vNear;
     if (a < 0.004) discard;
     gl_FragColor = vec4(vColor, a);
   }`;
@@ -286,7 +295,7 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
   starField(2600, 520, 6000, 3.2, 11);
 
   /* ============================================================
-     FLIGHT — pure cardinal moves between fixed destinations.
+     FLIGHT — pure cardinal moves between fixed stops.
      The camera NEVER rotates: it always faces -Z, and travel is a straight
      translation along exactly one world axis per section.
      ============================================================ */
@@ -393,160 +402,11 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
     return s;
   };
 
-  /* ============================================================
-     DESTINATIONS — one per stop, each a different kind of object.
-     ============================================================ */
+  // Depth at which the hero's shooting stars sit. This constant also used to
+  // position the per-section destination objects (globular cluster, nebula,
+  // constellation, binary pair); those were removed on request, leaving the
+  // flight as pure travel through the star field.
   const DEST_Z = -350;
-  const destinations: { group: THREE.Group; stopIndex: number; near: number }[] = [];
-
-  function addDestination(stopIndex: number, build: (g: THREE.Group) => void) {
-    const g = new THREE.Group();
-    const s = STOPS[stopIndex].pos;
-    const camZ = -DRIFT * (stopIndex / LEGS);
-    g.position.set(s.x, s.y, camZ + DEST_Z);
-    build(g);
-    g.traverse((o) => {
-      const mat = (o as THREE.Sprite | THREE.Points | THREE.Line).material as
-        | THREE.Material
-        | THREE.Material[]
-        | undefined;
-      if (mat && !Array.isArray(mat) && "opacity" in mat) {
-        o.userData.baseOpacity = (mat as THREE.Material & { opacity: number }).opacity;
-      }
-    });
-    scene.add(g);
-    destinations.push({ group: g, stopIndex, near: 0 });
-    return g;
-  }
-
-  // 1 — EXPERTISE: a globular cluster
-  addDestination(1, (g) => {
-    const N = 5200;
-    const geo = new THREE.BufferGeometry();
-    const pos = new Float32Array(N * 3);
-    const sz = new Float32Array(N);
-    const sd = new Float32Array(N);
-    const col = new Float32Array(N * 3);
-    const c = new THREE.Color();
-    for (let i = 0; i < N; i++) {
-      const r = 290 * Math.pow(Math.random(), 0.42);
-      const th = Math.random() * Math.PI * 2;
-      const ph = Math.acos(2 * Math.random() - 1);
-      pos[i * 3] = r * Math.sin(ph) * Math.cos(th);
-      pos[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th);
-      pos[i * 3 + 2] = r * Math.cos(ph) * 0.8;
-      sz[i] = 1.5 + Math.pow(Math.random(), 3) * 6.4;
-      sd[i] = Math.random();
-      c.setHex(Math.random() < 0.7 ? 0xffffff : 0xa8c4ff);
-      col[i * 3] = c.r;
-      col[i * 3 + 1] = c.g;
-      col[i * 3 + 2] = c.b;
-    }
-    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-    geo.setAttribute("aSize", new THREE.BufferAttribute(sz, 1));
-    geo.setAttribute("aSeed", new THREE.BufferAttribute(sd, 1));
-    geo.setAttribute("aColor", new THREE.BufferAttribute(col, 3));
-    const m = new THREE.ShaderMaterial({
-      uniforms: { uTime: { value: 0 }, uPixelRatio: { value: 1 } },
-      vertexShader: STAR_VERT,
-      fragmentShader: STAR_FRAG,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      fog: false,
-    });
-    starMats.push(m);
-    const pts = new THREE.Points(geo, m);
-    pts.frustumCulled = false;
-    g.add(pts);
-    g.add(sprite(0xbcd4ff, 600, 0.56));
-  });
-
-  // 2 — CAREER: an emission nebula
-  addDestination(2, (g) => {
-    const cv = document.createElement("canvas");
-    cv.width = cv.height = 256;
-    const x = cv.getContext("2d")!;
-    const gr = x.createRadialGradient(128, 128, 0, 128, 128, 128);
-    gr.addColorStop(0.0, "rgba(190,215,255,.42)");
-    gr.addColorStop(0.34, "rgba(70,120,245,.24)");
-    gr.addColorStop(1.0, "rgba(20,40,120,0)");
-    x.fillStyle = gr;
-    x.fillRect(0, 0, 256, 256);
-    const tex = new THREE.CanvasTexture(cv);
-    for (let i = 0; i < 20; i++) {
-      const s = new THREE.Sprite(
-        new THREE.SpriteMaterial({
-          map: tex,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          transparent: true,
-          opacity: 0.26 + Math.random() * 0.26,
-          color: i % 4 === 0 ? 0xffffff : 0x3b6bf0,
-          fog: false,
-        })
-      );
-      s.position.set((Math.random() - 0.5) * 760, (Math.random() - 0.5) * 500, (Math.random() - 0.5) * 340);
-      s.scale.setScalar(230 + Math.random() * 330);
-      g.add(s);
-    }
-    for (let i = 0; i < 8; i++) {
-      const s = sprite(0xffffff, 30 + Math.random() * 40, 0.9);
-      s.position.set((Math.random() - 0.5) * 500, (Math.random() - 0.5) * 340, 0);
-      g.add(s);
-    }
-  });
-
-  // 3 — PROJECTS: a constellation that draws itself in
-  const constellation: { line: THREE.Line | null; geo: THREE.BufferGeometry | null; sprites: THREE.Sprite[]; count: number } = {
-    line: null,
-    geo: null,
-    sprites: [],
-    count: 0,
-  };
-  addDestination(3, (g) => {
-    const pattern: [number, number, number][] = [
-      [-1.7, 0.9, 0],
-      [-0.6, 0.25, -0.2],
-      [0.5, 0.6, 0.1],
-      [1.7, -0.1, 0],
-      [0.5, 0.6, 0.1],
-      [0.25, 1.75, -0.2],
-      [0.5, 0.6, 0.1],
-      [0.85, -1.45, 0.15],
-    ];
-    const pts = pattern.map(([x, y, z]) => new THREE.Vector3(x * 150, y * 150, z * 150));
-    constellation.sprites = pts.map((v) => {
-      const s = sprite(0xffffff, 76, 0);
-      s.position.copy(v);
-      g.add(s);
-      return s;
-    });
-    const geo = new THREE.BufferGeometry().setFromPoints(pts);
-    geo.setDrawRange(0, 0);
-    const line = new THREE.Line(
-      geo,
-      new THREE.LineBasicMaterial({ color: 0x9dbaff, transparent: true, opacity: 0, fog: false })
-    );
-    g.add(line);
-    constellation.line = line;
-    constellation.geo = geo;
-    constellation.count = pts.length;
-    const bg = sprite(0x2f5ee0, 880, 0.46);
-    bg.position.set(0, 0, -60);
-    g.add(bg);
-    const bg2 = sprite(0x8fb0ff, 470, 0.36);
-    bg2.position.set(0, 0, -40);
-    g.add(bg2);
-  });
-
-  // 4 — CONTACT: a binary pair
-  const binary: THREE.Sprite[] = [];
-  addDestination(4, (g) => {
-    binary.push(sprite(0xffffff, 220), sprite(0x9dbaff, 132));
-    binary.forEach((s) => g.add(s));
-    g.add(sprite(0x5b86e8, 720, 0.48));
-  });
 
   /* ---------- warp streaks, aligned to the axis of travel ---------- */
   const STREAKS = 200;
@@ -690,49 +550,9 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
     camera.rotation.set(0, 0, 0);
     SKY.position.copy(camera.position);
 
-    for (const d of destinations) {
-      const dist = Math.abs(currentLeg + legEase - d.stopIndex);
-      const near = 1 - THREE.MathUtils.smoothstep(dist, 0.18, 0.62);
-      d.group.visible = near > 0.004;
-      d.near = near;
-      if (d.group.visible) {
-        d.group.traverse((o) => {
-          const mat = (o as THREE.Sprite | THREE.Points | THREE.Line).material as
-            | (THREE.Material & { opacity: number })
-            | undefined;
-          if (mat && o.userData.baseOpacity !== undefined) {
-            mat.opacity = o.userData.baseOpacity * near;
-          }
-        });
-      }
-    }
-
     const heroDist = Math.abs(currentLeg + legEase - 0);
     const heroNear = 1 - THREE.MathUtils.smoothstep(heroDist, 0.18, 0.62);
     updateMeteors(dt, heroNear);
-
-    if (constellation.geo && constellation.line) {
-      const near = destinations.find((d) => d.stopIndex === 3)?.near || 0;
-      const segs = Math.max(0, Math.min(constellation.count, Math.ceil(near * constellation.count)));
-      constellation.geo.setDrawRange(0, segs);
-      (constellation.line.material as THREE.Material & { opacity: number }).opacity = near;
-      constellation.sprites.forEach((s, i) => {
-        (s.material as THREE.Material & { opacity: number }).opacity = THREE.MathUtils.clamp(
-          near * constellation.count - i,
-          0,
-          1
-        );
-        s.scale.setScalar(76 + Math.sin(t * 1.3 + i) * 8);
-      });
-    }
-
-    if (binary.length === 2) {
-      const a = t * 0.32;
-      binary[0].position.set(Math.cos(a) * 62, Math.sin(a) * 62, 0);
-      binary[1].position.set(-Math.cos(a) * 104, -Math.sin(a) * 104, 0);
-      binary[0].scale.setScalar(220 + Math.sin(t * 0.9) * 14);
-      binary[1].scale.setScalar(132 + Math.cos(t * 1.1) * 9);
-    }
 
     const sv = Math.min(1, vel.v);
     (streaks.material as THREE.Material & { opacity: number }).opacity = sv * 0.55;

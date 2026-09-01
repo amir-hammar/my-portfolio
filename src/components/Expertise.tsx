@@ -27,7 +27,11 @@ function Expertise() {
                   const label = t(`expertise.${category.id}.skills.${skill.key}`);
                   return (
                     <li className="tech" key={skill.key} tabIndex={0}>
-                      <span className="tech-mark">
+                      <span
+                        className={`tech-mark${skill.wide ? " tech-mark--wide" : ""}${
+                          skill.monochrome ? " tech-mark--mono" : ""
+                        }`}
+                      >
                         {skill.logo ? (
                           // Two stacked copies of the same mark: a white-knocked-out
                           // one on top of the full-colour original. Hover crossfades
@@ -46,17 +50,25 @@ function Expertise() {
                               loading="lazy"
                               decoding="async"
                             />
-                            <img
-                              className="tech-color"
-                              src={skill.logo}
-                              alt=""
-                              aria-hidden="true"
-                              loading="lazy"
-                              decoding="async"
-                            />
+                            {!skill.monochrome && (
+                              <img
+                                className="tech-color"
+                                src={skill.logo}
+                                alt=""
+                                aria-hidden="true"
+                                loading="lazy"
+                                decoding="async"
+                              />
+                            )}
                           </>
+                        ) : skill.glyph ? (
+                          <FontAwesomeIcon icon={skill.glyph} className="tech-glyph" />
                         ) : (
-                          <FontAwesomeIcon icon={skill.glyph!} className="tech-glyph" />
+                          // Typographic stand-in for a real product whose logo
+                          // no icon set carries. See the note in data/skills.ts.
+                          <span className="tech-letter" aria-hidden="true">
+                            {skill.mark}
+                          </span>
                         )}
                       </span>
                       <span className="tech-name">{label}</span>

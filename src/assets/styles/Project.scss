@@ -35,7 +35,11 @@
   background: rgba(4, 8, 20, 0.6);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
 
-  > img,
+  // `:not(.project-inset)` matters: the inset is a direct child <img> too, so
+  // without it this rule also matched the inset and beat `.project-inset` on
+  // specificity (0,1,1) vs (0,1,0), forcing it to width/height 100% and hiding
+  // the main image behind it.
+  > img:not(.project-inset),
   > video {
     display: block;
     width: 100%;
@@ -55,15 +59,27 @@
     pointer-events: none;
   }
 
-  &:hover > img,
-  &:hover > video {
+  // Asymmetric on purpose: hovering the main image moves BOTH, hovering the
+  // inset moves only the inset.
+  //
+  // The inset follows the main image in the DOM, so `~` reaches it from the
+  // main image's own :hover. The reverse doesn't happen for free and doesn't
+  // need to - the inset is a sibling sitting on top, so pointing at it never
+  // puts the main image into :hover.
+  > img:not(.project-inset):hover,
+  > video:hover {
     transform: scale(1.04);
+  }
+
+  > img:not(.project-inset):hover ~ .project-inset {
+    transform: translateY(-8px) scale(1.05);
   }
 }
 
 // Secondary shot, floated over the bottom-right of the primary one.
 .project-inset {
   position: absolute;
+  height: auto;
   right: 3%;
   bottom: 7%;
   z-index: 2;
@@ -73,7 +89,7 @@
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 
-  .project-media:hover & {
+  &:hover {
     transform: translateY(-8px) scale(1.05);
   }
 }
@@ -142,9 +158,9 @@
     transition: none;
   }
 
-  .project-media:hover > img,
-  .project-media:hover > video,
-  .project-media:hover .project-inset {
+  .project-media > img:hover,
+  .project-media > video:hover,
+  .project-inset:hover {
     transform: none;
   }
 }

@@ -210,3 +210,134 @@
     }
   }
 }
+
+// ─── Touch / narrow screens ───────────────────────────────────────────────
+// The white-knockout resting state only makes sense as one half of a hover
+// crossfade. With no hover there is nothing to reveal the colour, so the marks
+// would just sit there blank and white. Show the real logo outright instead and
+// drop the motion.
+//
+// `hover: none` is the accurate test (a phone, not a narrow window); the width
+// clause is there so a desktop browser resized to a phone width previews the
+// same thing.
+@media (hover: none), (max-width: 768px) {
+  .tech-mono {
+    display: none;
+  }
+
+  .tech-color {
+    opacity: 1;
+  }
+
+  .tech-glyph {
+    color: var(--royal-hi);
+    opacity: 1;
+  }
+
+  .tech-name {
+    color: var(--white);
+    opacity: 0.95;
+  }
+
+  // No lift, no bloom, no scale — none of it is reachable without a pointer,
+  // and leaving the transitions in place only costs compositing on scroll.
+  .tech {
+    transition: none;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .tech-mark {
+    transition: none;
+  }
+
+  .tech:hover,
+  .tech:focus-visible {
+    transform: none;
+    box-shadow: none;
+
+    .tech-mark {
+      transform: none;
+    }
+  }
+}
+
+// Monogram stand-in for products with no logo in any icon set. Sized and
+// coloured to sit in the same rhythm as the real marks rather than competing
+// with them.
+.tech-letter {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(122, 160, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(122, 160, 255, 0.07);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  opacity: 0.85;
+  transition: color 0.38s ease, opacity 0.38s ease, border-color 0.38s ease,
+    background 0.38s ease;
+}
+
+.tech:hover .tech-letter,
+.tech:focus-visible .tech-letter {
+  color: var(--royal-hi);
+  border-color: var(--royal-hi);
+  background: rgba(122, 160, 255, 0.14);
+  opacity: 1;
+}
+
+@media (hover: none), (max-width: 768px) {
+  .tech-letter {
+    color: var(--royal-hi);
+    border-color: rgba(122, 160, 255, 0.45);
+    opacity: 1;
+    transition: none;
+  }
+}
+
+// Wordmarks (Grafana Loki/Tempo, Mockito) are roughly 2:1, so a square box
+// would shrink them until the lettering was unreadable. Widen the box but keep
+// the height identical, so tile heights and the grid rhythm are unaffected.
+.tech-mark--wide {
+  width: clamp(74px, 7.4vw, 94px);
+  aspect-ratio: auto;
+  height: clamp(44px, 4.4vw, 58px);
+}
+
+// A monochrome logo has no colour layer to reveal, so the two rules that
+// normally hand off to it would leave the tile empty: `:hover` fades the white
+// knockout to 0, and the touch block sets it to `display: none`. Both are
+// undone here — the knockout IS the logo in this case, so it stays put and
+// only brightens on hover.
+.tech-mark--mono {
+  .tech-mono {
+    display: block;
+    opacity: 0.85;
+    // `invert(1)`, NOT the `brightness(0) invert(1)` knockout used elsewhere.
+    // These marks are not flat silhouettes: xUnit's X is 86% dark body with
+    // 13.5% light strokes running through it. Forcing brightness to 0 first
+    // collapses both groups to pure white and the strokes disappear, leaving a
+    // solid white X. A plain inversion maps dark->light and light->dark, so the
+    // internal detail survives and simply reads in reverse against the panel.
+    filter: invert(1);
+  }
+}
+
+.tech:hover .tech-mark--mono .tech-mono,
+.tech:focus-visible .tech-mark--mono .tech-mono {
+  opacity: 1;
+}
+
+@media (hover: none), (max-width: 768px) {
+  .tech-mark--mono .tech-mono {
+    display: block;
+    opacity: 0.92;
+  }
+}

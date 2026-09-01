@@ -113,3 +113,67 @@
     bottom: 8px;
   }
 }
+// The number is the constant: always shown, always the brightest thing in the
+// pill after the star itself.
+.like-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  white-space: nowrap;
+  user-select: none;
+}
+
+// The message beside it is secondary. It brightens slightly while it is still
+// asking for a star, then settles once the star has been given.
+.like-message {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  opacity: 0.82;
+  white-space: nowrap;
+  user-select: none;
+
+  &.liked {
+    color: var(--muted);
+    opacity: 1;
+  }
+}
+
+// Only the very narrowest screens drop the sentence. Measured: the pill is
+// 324px with the message, plus its 12px offset, so it still clears a 360px
+// phone and only overflows below ~340px. The count is never dropped.
+@media (max-width: 359px) {
+  .like-message {
+    display: none;
+  }
+}
+
+// A refused press jolts the star instead of emptying it, so the "no" is felt
+// before it is read.
+.like-button.refusing {
+  animation: like-refuse 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes like-refuse {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px) rotate(-6deg); }
+  35% { transform: translateX(4px) rotate(5deg); }
+  55% { transform: translateX(-3px) rotate(-3deg); }
+  75% { transform: translateX(2px) rotate(2deg); }
+}
+
+// The pleading line gets the gold used elsewhere for the hover accent, so it
+// reads as the star protesting rather than as normal status text.
+.like-message.protesting {
+  color: var(--gold);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .like-button.refusing {
+    animation: none;
+  }
+}

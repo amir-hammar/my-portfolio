@@ -17,6 +17,16 @@ i18n
             footer: "A portfolio built by Amir Hammar",
           },
 
+          hud: {
+            invite: "Drop a like if you like what you see!",
+            thanks: "Thanks for the star!",
+            protest1: "Too late, no takebacks!",
+            protest2: "Wait, please reconsider...",
+            protest3: "Okay, I am begging you now.",
+            surrendered: "Fine. It is gone. I am fine.",
+            failed: "signal lost"
+          },
+
           navigation: {
             expertise: "Expertise",
             career: "Career",
@@ -32,24 +42,32 @@ i18n
               skills: {
                 python: "Python",
                 java: "Java",
-                c: "C",
                 cpp: "C++",
                 csharp: "C#",
+                dotnet: ".NET",
+                rust: "Rust",
                 javascript: "JavaScript",
                 typescript: "TypeScript",
-                apiIntegration: "API Integration",
-                objectOrientedProgramming: "Object-Oriented Programming",
-              },
-            },
-            webDevelopment: {
-              title: "Web Development",
-              skills: {
-                reactjs: "React.js",
-                nodejs: "Node.js",
                 html: "HTML",
                 css: "CSS",
+                entityFramework: "Entity Framework",
+                restfulApi: "RESTful APIs",
+                apiIntegration: "API Integration",
+                objectOrientedProgramming: "Object Oriented Programming",
+                cleanArchitecture: "Clean Architecture",
+                microservices: "Microservices",
+              },
+            },
+            frameworks: {
+              title: "Frameworks & Libraries",
+              skills: {
+                reactjs: "React.js",
+                tkinter: "Tkinter",
+                kafka: "Kafka",
+                nodejs: "Node.js",
                 jquery: "JQuery",
-                maven: "Maven",
+                nginx: "NGINX",
+                krakend: "KrakenD",
               },
             },
             data: {
@@ -59,9 +77,13 @@ i18n
                 json: "JSON",
                 bigquery: "BigQuery",
                 sqlQuery: "SQL Query",
+                nosql: "NoSQL",
                 mysql: "MySQL",
+                powerbi: "Power BI",
                 postgresql: "PostgreSQL",
                 mariadb: "MariaDB",
+                redis: "Redis",
+                apacheBeam: "Apache Beam",
                 pandas: "Pandas",
                 numpy: "NumPy",
                 statisticalAnalysis: "Statistical Analysis",
@@ -71,7 +93,11 @@ i18n
               title: "Development Tools & Environments",
               skills: {
                 github: "GitHub",
+                gitlab: "GitLab",
+                jira: "Jira",
                 docker: "Docker",
+                kubernetes: "Kubernetes",
+                gcp: "Google Cloud Platform",
                 azure: "Azure",
                 visualStudioCode: "Visual Studio Code",
                 pycharm: "PyCharm",
@@ -80,6 +106,26 @@ i18n
                 windowsServer: "Windows Server",
                 bash: "Bash",
                 matlab: "Matlab",
+                maven: "Maven",
+              },
+            },
+            observability: {
+              title: "Observability & Monitoring",
+              skills: {
+                prometheus: "Prometheus",
+                grafana: "Grafana",
+                opentelemetry: "OpenTelemetry",
+                tempo: "Tempo",
+                loki: "Loki",
+              },
+            },
+            testing: {
+              title: "Testing",
+              skills: {
+                junit: "JUnit",
+                xunit: "xUnit",
+                mockito: "Mockito",
+                k6: "k6",
               },
             },
           },
@@ -87,21 +133,21 @@ i18n
           career: {
             title: "Career History",
             stingray: {
-              date: "Jan 2025 - Present",
+              date: "Jan 2025 to Apr 2025",
               title: "Software Developer",
               company: "Stingray",
               city: "Montreal, QC, CA",
               tasks: {
                 title: "Tasks",
                 list: [
-                  "Worked with <b>ETL</b> pipelines on <b>Google Cloud Platform (GCP)</b>, processing <b>20+ GB</b> of data daily using <b>Apache Beam</b>",
-                  "Contributed approximately <b>3,000+ lines</b> of <b>Java</b> production code across multiple repositories",
-                  "Processed and analyzed datasets containing <b>50+ million</b> rows across <b>30+ BigQuery tables</b>",
-                  "Wrote <b>500+ lines</b> of <b>Python</b> scripts for data analysis, validation, and troubleshooting",
-                  "Contributed to <b>18+ JIRA tickets</b> across multiple data engineering projects",
-                  "Created and implemented <b>40+ unit tests</b> to ensure code quality and data integrity",
-                  "Improved data quality for analytics platforms serving <b>10+ million users</b>",
-                  "Developed an automated monitoring solution for 5 different data sources that sends daily status reports via Microsoft Teams, providing real-time visibility into ETL pipeline performance"
+                  "<b>ETL</b> pipelines on <b>GCP</b>: <b>20+ GB</b> daily via <b>Apache Beam</b>",
+                  "<b>3,000+ lines</b> of production <b>Java</b>",
+                  "<b>50M+ rows</b> across <b>30+ BigQuery</b> tables",
+                  "<b>500+ lines</b> of <b>Python</b>: analysis, validation, debugging",
+                  "<b>18+ JIRA tickets</b> delivered",
+                  "<b>40+ unit tests</b> authored",
+                  "Analytics data quality for <b>10M+ users</b>",
+                  "Automated monitoring: <b>5 sources</b>, daily <b>Teams</b> reports"
                 ]
               },
               technologies: {
@@ -119,17 +165,17 @@ i18n
               }
             },
             ssc: {
-              date: "May 2024 - Dec 2024",
+              date: "May 2024 to Dec 2024",
               title: "Data Analyst",
               company: "Shared Services Canada",
               city: "Montreal, QC, CA",
               tasks: {
                 title: "Tasks",
                 list: [
-                  "Built a <b>Python-based</b> solution automating the extraction, verification, and updating of <b>5,000+ rows</b> of email data across multiple Excel files, using <b>customTkinter</b> for the GUI",
-                  "Automated <b>15+ recurring</b> data update processes using <b>Power Automate</b>",
-                  "Migrated a consolidated Excel dataset covering <b>10+ services</b> to an <b>Azure SQL Server</b> using <b>SSMS</b>",
-                  "Imported, transformed, and visualized data in <b>Power BI</b>, enhancing <b>5+ existing reports</b> with <b>20+ new visuals</b>"
+                  "<b>Python</b> + <b>customTkinter</b> tool for <b>5,000+ rows</b> of email data",
+                  "<b>15+ recurring processes</b> automated with <b>Power Automate</b>",
+                  "Excel to <b>Azure SQL</b> migration across <b>10+ services</b>",
+                  "<b>Power BI</b>: <b>5+ reports</b> extended, <b>20+ new visuals</b>"
                 ]
               },
               technologies: {
@@ -148,17 +194,17 @@ i18n
               }
             },
             matrox: {
-              date: "Jan 2023 - Aug 2023",
+              date: "Jan 2023 to Aug 2023",
               title: "R&D Technician",
               company: "Matrox",
               city: "Montreal, QC, CA",
               tasks: {
                 title: "Tasks",
                 list: [
-                  "Developed and enhanced <b>10+ features</b> in an existing <b>C project</b>",
-                  "Resolved <b>15+ bugs</b> impacting the integration of new features",
-                  "Configured an <b>Ubuntu virtual machine</b> from scratch to meet specific project requirements",
-                  "Performed 50+ HDMI protocol tests on various devices using an oscilloscope to verify compliance and performance"
+                  "<b>10+ features</b> built in an existing <b>C</b> codebase",
+                  "<b>15+ bugs</b> resolved",
+                  "<b>Ubuntu VM</b> configured from scratch",
+                  "<b>50+ HDMI</b> protocol tests via oscilloscope"
                 ]
               },
               technologies: {
@@ -174,17 +220,17 @@ i18n
               }
             },
             addatech: {
-              date: "June 2022 - Aug 2022",
+              date: "June 2022 to Aug 2022",
               title: "Technical Support Technician",
               company: "Addatech",
               city: "Laval, QC, CA",
               tasks: {
                 title: "Tasks",
                 list: [
-                  "Responded to <b>30+ technical support requests</b> via email and phone",
-                  "Provided written solutions and troubleshooting steps to resolve <b>10+</b> user issues, improving resolution time",
-                  "Used remote control software to assist <b>5+</b> users in troubleshooting and resolving technical issues",
-                  "Assisted with the installation and configuration of software for <b>10+</b> users"
+                  "<b>30+ support requests</b> by email and phone",
+                  "<b>10+ user issues</b> resolved with written troubleshooting",
+                  "<b>5+ users</b> assisted over remote control",
+                  "Software install and configuration for <b>10+ users</b>"
                 ]
               },
               technologies: {
@@ -211,17 +257,17 @@ i18n
             aspire: {
               title: "Aspire",
               description:
-                "Develop a <b>voice assistant</b> named <b>Aspire</b> (still under development) for <b>computer control</b>. It enables users to <b>open applications</b>, <b>navigate the web</b>, and ask questions to <b>ChatGPT</b>. The project leverages <b>OpenAI GPT-3</b> and <b>Python</b>, utilizes <b>APIs</b> for integration, and incorporates <b>audio file management</b>.",
+                "Develop a <b>voice assistant</b> named <b>Aspire</b> (still under development) for <b>computer control</b>. It enables users to <b>open applications</b>, <b>navigate the web</b>, and ask questions to <b>ChatGPT</b>. The project leverages <b>OpenAI GPT 3</b> and <b>Python</b>, utilizes <b>APIs</b> for integration, and incorporates <b>audio file management</b>.",
             },
             database: {
               title: "Web Database Interface",
               description:
-                "Set up a <b>web database interface</b> on a <b>Raspberry Pi</b> server with a <b>web interface</b> that simplifies <b>displaying</b>, <b>entering</b>, and <b>manipulating data</b>. Leveraging <b>web development</b> best practices, the project integrates <b>SQL</b> capabilities with a user-friendly <b>user interface</b> and utilizes <b>MariaDB</b> for robust database management.",
+                "Set up a <b>web database interface</b> on a <b>Raspberry Pi</b> server with a <b>web interface</b> that simplifies <b>displaying</b>, <b>entering</b>, and <b>manipulating data</b>. Leveraging <b>web development</b> best practices, the project integrates <b>SQL</b> capabilities with a clear <b>user interface</b> and utilizes <b>MariaDB</b> for robust database management.",
             },
             voiceTranslator: {
               title: "Voice Translator",
               description:
-                "Developed a <b>Python-powered</b> voice translator that converts <b>speech to text</b> using <b>OpenAI Whisper</b> and <b>NumPy</b> for processing, translates the extracted text into Japanese via an <b>external API</b>, and synthesizes the translated text back into <b>speech</b> using advanced speech processing techniques.",
+                "Developed a voice translator <b>built in Python</b> that converts <b>speech to text</b> using <b>OpenAI Whisper</b> and <b>NumPy</b> for processing, translates the extracted text into Japanese via an <b>external API</b>, and synthesizes the translated text back into <b>speech</b> using advanced speech processing techniques.",
             },
             dataUpdater: {
               title: "Data Updater Application",
@@ -241,9 +287,10 @@ i18n
           },
 
           contact: {
-            title: "Contact Me",
-            description: "Got a project waiting to be realized? Let's collaborate and make it happen!",
-            button: "Send me an email"
+            title: "Get in Touch",
+            description: "Have a project in mind, a role to fill, or just want to talk shop? Reach out whichever way suits you. I read both.",
+            linkedinButton: "Message me on LinkedIn",
+            emailButton: "Send an email"
           },
         },
       },
@@ -253,6 +300,16 @@ i18n
           main: {
             role: "Étudiant en Génie Logiciel",
             footer: "Un portfolio construit par Amir Hammar",
+          },
+
+          hud: {
+            invite: "Laissez un like si ça vous plaît !",
+            thanks: "Merci pour l'étoile !",
+            protest1: "Trop tard, on ne reprend pas !",
+            protest2: "Attendez, réfléchissez bien...",
+            protest3: "Là je supplie. Vraiment.",
+            surrendered: "Bon. C'est retiré. Tout va bien.",
+            failed: "signal perdu"
           },
 
           navigation: {
@@ -270,24 +327,32 @@ i18n
               skills: {
                 python: "Python",
                 java: "Java",
-                c: "C",
                 cpp: "C++",
                 csharp: "C#",
+                dotnet: ".NET",
+                rust: "Rust",
                 javascript: "JavaScript",
                 typescript: "TypeScript",
-                apiIntegration: "Intégration d'API",
-                objectOrientedProgramming: "Programmation Orientée Objet",
-              },
-            },
-            webDevelopment: {
-              title: "Développement Web",
-              skills: {
-                reactjs: "React.js",
-                nodejs: "Node.js",
                 html: "HTML",
                 css: "CSS",
+                entityFramework: "Entity Framework",
+                restfulApi: "APIs RESTful",
+                apiIntegration: "Intégration d'API",
+                objectOrientedProgramming: "Programmation Orientée Objet",
+                cleanArchitecture: "Clean Architecture",
+                microservices: "Microservices",
+              },
+            },
+            frameworks: {
+              title: "Frameworks et Bibliothèques",
+              skills: {
+                reactjs: "React.js",
+                tkinter: "Tkinter",
+                kafka: "Kafka",
+                nodejs: "Node.js",
                 jquery: "JQuery",
-                maven: "Maven",
+                nginx: "NGINX",
+                krakend: "KrakenD",
               },
             },
             data: {
@@ -297,9 +362,13 @@ i18n
                 json: "JSON",
                 bigquery: "BigQuery",
                 sqlQuery: "Requêtes SQL",
+                nosql: "NoSQL",
                 mysql: "MySQL",
+                powerbi: "Power BI",
                 postgresql: "PostgreSQL",
                 mariadb: "MariaDB",
+                redis: "Redis",
+                apacheBeam: "Apache Beam",
                 pandas: "Pandas",
                 numpy: "NumPy",
                 statisticalAnalysis: "Analyse Statistique",
@@ -309,7 +378,11 @@ i18n
               title: "Outils et Environnements de Développement",
               skills: {
                 github: "GitHub",
+                gitlab: "GitLab",
+                jira: "Jira",
                 docker: "Docker",
+                kubernetes: "Kubernetes",
+                gcp: "Google Cloud Platform",
                 azure: "Azure",
                 visualStudioCode: "Visual Studio Code",
                 pycharm: "PyCharm",
@@ -318,6 +391,26 @@ i18n
                 windowsServer: "Windows Server",
                 bash: "Bash",
                 matlab: "Matlab",
+                maven: "Maven",
+              },
+            },
+            observability: {
+              title: "Observabilité et Supervision",
+              skills: {
+                prometheus: "Prometheus",
+                grafana: "Grafana",
+                opentelemetry: "OpenTelemetry",
+                tempo: "Tempo",
+                loki: "Loki",
+              },
+            },
+            testing: {
+              title: "Tests",
+              skills: {
+                junit: "JUnit",
+                xunit: "xUnit",
+                mockito: "Mockito",
+                k6: "k6",
               },
             },
           },
@@ -325,21 +418,21 @@ i18n
           career: {
             title: "Parcours Professionnel",
             stingray: {
-              date: "Jan 2025 - Présent",
+              date: "Janv 2025 à Avril 2025",
               title: "Développeur Logiciel",
               company: "Stingray",
               city: "Montréal, QC, CA",
               tasks: {
                 title: "Tâches",
                 list: [
-                  "Travaillé sur des pipelines <b>ETL</b> sur <b>Google Cloud Platform (GCP)</b>, traitant <b>plus de 20 Go</b> de données par jour avec <b>Apache Beam</b>",
-                  "Contribué à plus de <b>3 000 lignes</b> de code <b>Java</b> en production réparties sur plusieurs dépôts",
-                  "Traité et analysé des ensembles de données contenant plus de <b>50 millions</b> de lignes réparties sur plus de <b>30 tables BigQuery</b>",
-                  "Écrit plus de <b>500 lignes</b> de scripts <b>Python</b> pour l'analyse, la validation et le dépannage des données",
-                  "Contribué à plus de <b>18 tickets JIRA</b> à travers plusieurs projets d'ingénierie de données",
-                  "Créé et mis en œuvre plus de <b>40 tests unitaires</b> pour assurer la qualité du code et l'intégrité des données",
-                  "Amélioré la qualité des données pour des plateformes d'analytique desservant plus de <b>10 millions d'utilisateurs</b>",
-                  "Développé une solution de surveillance automatisée pour 5 sources de données, envoyant des rapports quotidiens via Microsoft Teams pour une visibilité en temps réel sur la performance des pipelines ETL"
+                  "Pipelines <b>ETL</b> sur <b>GCP</b> : <b>20+ Go</b> par jour via <b>Apache Beam</b>",
+                  "<b>3 000+ lignes</b> de <b>Java</b> en production",
+                  "<b>50M+ lignes</b> sur <b>30+ tables BigQuery</b>",
+                  "<b>500+ lignes</b> de <b>Python</b> : analyse, validation, dépannage",
+                  "<b>18+ tickets JIRA</b> livrés",
+                  "<b>40+ tests unitaires</b> écrits",
+                  "Qualité des données pour <b>10M+ utilisateurs</b>",
+                  "Surveillance automatisée : <b>5 sources</b>, rapports <b>Teams</b> quotidiens"
                 ]
               },
               technologies: {
@@ -357,17 +450,17 @@ i18n
               }
             },
             ssc: {
-              date: "Mai 2024 - Déc 2024",
+              date: "Mai 2024 à Déc 2024",
               title: "Analyste de Données",
               company: "Services Partagés Canada",
               city: "Montréal, QC, CA",
               tasks: {
                 title: "Tâches",
                 list: [
-                  "Développé une solution basée sur <b>Python</b> automatisant l'extraction, la vérification et la mise à jour de plus de <b>5 000 lignes</b> de données d'emails à travers plusieurs fichiers Excel, en utilisant <b>customTkinter</b> pour l'interface graphique",
-                  "Automatisé plus de <b>15 processus</b> de mise à jour de données récurrents avec <b>Power Automate</b>",
-                  "Migré un jeu de données consolidé provenant de Excel couvrant plus de <b>10 services</b> vers un <b>serveur SQL Azure</b> en utilisant <b>SSMS</b>",
-                  "Importé, transformé et visualisé des données dans <b>Power BI</b>, en améliorant plus de <b>5 rapports</b> existants avec <b>20+ nouvelles visualisations</b>"
+                  "Outil <b>Python</b> + <b>customTkinter</b> pour <b>5 000+ lignes</b> de données courriel",
+                  "<b>15+ processus récurrents</b> automatisés avec <b>Power Automate</b>",
+                  "Migration Excel vers <b>SQL Azure</b> sur <b>10+ services</b>",
+                  "<b>Power BI</b> : <b>5+ rapports</b> enrichis, <b>20+ visualisations</b>"
                 ]
               },
               technologies: {
@@ -386,17 +479,17 @@ i18n
               }
             },
             matrox: {
-              date: "Jan 2023 - Août 2023",
+              date: "Jan 2023 à Août 2023",
               title: "Technicien R&D",
               company: "Matrox",
               city: "Montréal, QC, CA",
               tasks: {
                 title: "Tâches",
                 list: [
-                  "Développé et amélioré plus de <b>10 fonctionnalités</b> dans un <b>projet C</b> existant",
-                  "Résolu plus de <b>15 bogues</b> affectant l'intégration des nouvelles fonctionnalités",
-                  "Configuré une <b>machine virtuelle Ubuntu</b> depuis zéro pour répondre aux besoins spécifiques du projet",
-                  "Effectué plus de <b>50 tests</b> du protocole HDMI sur divers appareils à l'aide d'un oscilloscope pour vérifier la conformité et la performance"
+                  "<b>10+ fonctionnalités</b> dans un projet <b>C</b> existant",
+                  "<b>15+ bogues</b> résolus",
+                  "<b>VM Ubuntu</b> configurée depuis zéro",
+                  "<b>50+ tests</b> du protocole HDMI à l'oscilloscope"
                 ]
               },
               technologies: {
@@ -412,17 +505,17 @@ i18n
               }
             },
             addatech: {
-              date: "Juin 2022 - Août 2022",
+              date: "Juin 2022 à Août 2022",
               title: "Technicien Support Technique",
               company: "Addatech",
               city: "Laval, QC, CA",
               tasks: {
                 title: "Tâches",
                 list: [
-                  "Répondu à plus de <b>30</b> demandes de support technique par email et téléphone",
-                  "Fournit des solutions écrites et des étapes de dépannage pour résoudre plus de <b>10 problèmes</b> utilisateurs, améliorant ainsi le temps de résolution",
-                  "Utilisé des logiciels de prise en main à distance pour aider plus de <b>5 utilisateurs</b> dans le dépannage et la résolution de problèmes techniques",
-                  "Assisté dans l'installation et la configuration de logiciels pour plus de <b>10 utilisateurs</b>"
+                  "<b>30+ demandes</b> de support par courriel et téléphone",
+                  "<b>10+ problèmes</b> résolus avec procédures écrites",
+                  "<b>5+ utilisateurs</b> assistés en prise en main à distance",
+                  "Installation et configuration logicielle pour <b>10+ utilisateurs</b>"
                 ]
               },
               technologies: {
@@ -449,7 +542,7 @@ i18n
             aspire: {
               title: "Aspire",
               description:
-                "Développement d'un <b>assistant vocal</b> nommé <b>Aspire</b> (en cours de développement) pour le <b>contrôle d'ordinateur</b>. Il permet aux utilisateurs d'<b>ouvrir des applications</b>, de <b>naviguer sur le web</b> et de poser des questions à <b>ChatGPT</b>. Le projet utilise <b>OpenAI GPT-3</b> et <b>Python</b>, des <b>APIs</b> pour l'intégration, et la gestion de <b>fichiers audio</b>.",
+                "Développement d'un <b>assistant vocal</b> nommé <b>Aspire</b> (en cours de développement) pour le <b>contrôle d'ordinateur</b>. Il permet aux utilisateurs d'<b>ouvrir des applications</b>, de <b>naviguer sur le web</b> et de poser des questions à <b>ChatGPT</b>. Le projet utilise <b>OpenAI GPT 3</b> et <b>Python</b>, des <b>APIs</b> pour l'intégration, et la gestion de <b>fichiers audio</b>.",
             },
             database: {
               title: "Interface de Base de Données Web",
@@ -480,8 +573,9 @@ i18n
 
           contact: {
             title: "Me Contacter",
-            description: "Vous avez un projet en attente de réalisation ? Collaborons pour le concrétiser !",
-            button: "Envoyez-moi un email"
+            description: "Un projet en tête, un poste à pourvoir, ou simplement envie d'échanger ? Choisissez le canal qui vous convient, je lis les deux.",
+            linkedinButton: "M'écrire sur LinkedIn",
+            emailButton: "Envoyer un courriel"
           },
 
         },

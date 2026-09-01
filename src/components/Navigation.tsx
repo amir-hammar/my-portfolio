@@ -1,23 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListIcon from "@mui/icons-material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 gsap.registerPlugin(ScrollToPlugin);
-
-const drawerWidth = 240;
 
 const NAV_SECTIONS = [
   { id: "expertise", labelKey: "navigation.expertise" },
@@ -105,6 +93,23 @@ function Navigation() {
     return () => observer.disconnect();
   }, []);
 
+  // The overlay replaces MUI's Drawer, so the two behaviours it gave us for
+  // free have to be restated: close on Escape, and stop the page scrolling
+  // underneath while the menu covers it.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [mobileOpen]);
+
   const scrollToSection = useCallback(
     (section: string) => {
       const el = document.getElementById(section);
@@ -128,31 +133,10 @@ function Navigation() {
     [reducedMotion]
   );
 
-  const drawer = (
-    <Box
-      className="navigation-bar-responsive"
-      onClick={handleDrawerToggle}
-      sx={{ textAlign: "center", height: "100%" }}
-    >
-      <p className="mobile-menu-top">
-        <ListIcon />
-        Menu
-      </p>
-      <Divider />
-      <List>
-        {NAV_SECTIONS.map(({ id, labelKey }) => (
-          <ListItem key={id} disablePadding>
-            <ListItemButton
-              sx={{ textAlign: "center" }}
-              onClick={() => scrollToSection(id)}
-            >
-              <ListItemText primary={t(labelKey)} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+  const goTo = (id: string) => {
+    setMobileOpen(false);
+    scrollToSection(id);
+  };
 
   return (
     <>
@@ -165,16 +149,23 @@ function Navigation() {
         className={`site-nav${scrolled ? " scrolled" : ""}`}
       >
         <nav className="site-nav-inner" aria-label="Main">
-          <div className="nav-cell nav-brand">
+          <div className="nav-cell nav-burger">
+            {/* Hand-drawn rather than MUI's MenuIcon. `color="inherit"` walked up
+                to <body>, which has no colour of its own, so it landed on
+                CssBaseline's rgba(0,0,0,0.87) - a near-black glyph on a near-black
+                bar. Two hairline bars also sit better with the rest of the chrome
+                than a three-bar glyph. */}
             <button
               type="button"
-              className="brand-button"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className={`burger${mobileOpen ? " is-open" : ""}`}
+              aria-label="Open menu"
+              aria-expanded={mobileOpen}
+              onClick={handleDrawerToggle}
             >
-              <span className="brand-name">Amir Hammar</span>
+              <span className="burger-bar" />
+              <span className="burger-bar" />
             </button>
           </div>
-
           <div className="nav-cell nav-links">
             {NAV_SECTIONS.map(({ id, labelKey }) => (
               <button
@@ -200,36 +191,58 @@ function Navigation() {
             </button>
           </div>
 
-          <div className="nav-cell nav-burger">
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-            >
-              <MenuIcon />
-            </IconButton>
-          </div>
         </nav>
       </header>
 
-      <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{ keepMounted: true }}
-        PaperProps={{
-          sx: {
-            display: { xs: "block", sm: "none" },
-            width: drawerWidth,
-            overflowY: "hidden",
-            backgroundColor: "#0d1116",
-            "& span, & p": { color: "#fcfcfc" },
-          },
-        }}
+      {/* Full-screen overlay, always mounted so it can animate closed as well
+          as open. It irises out of the burger with an expanding circular
+          clip-path, and the links stagger in behind it. */}
+      <div
+        id="mobile-menu"
+        className={`menu-overlay${mobileOpen ? " is-open" : ""}`}
+        aria-hidden={!mobileOpen}
       >
-        {drawer}
-      </Drawer>
+        <div className="menu-overlay-head">
+          <span className="menu-overlay-label">Menu</span>
+          <button
+            type="button"
+            className="menu-close"
+            aria-label="Close menu"
+            onClick={() => setMobileOpen(false)}
+          >
+            <span className="close-x" />
+          </button>
+        </div>
+
+        <nav className="menu-overlay-links" aria-label="Sections">
+          {NAV_SECTIONS.map(({ id, labelKey }, i) => (
+            <button
+              key={id}
+              type="button"
+              tabIndex={mobileOpen ? 0 : -1}
+              className={`menu-overlay-link${active === id ? " is-active" : ""}`}
+              style={{ "--i": i } as React.CSSProperties}
+              onClick={() => goTo(id)}
+            >
+              <span className="menu-overlay-index">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="menu-overlay-text">{t(labelKey)}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="menu-overlay-foot">
+          <button
+            type="button"
+            tabIndex={mobileOpen ? 0 : -1}
+            className="menu-overlay-cta"
+            onClick={() => goTo("contact")}
+          >
+            {t("navigation.talk")}
+          </button>
+        </div>
+      </div>
     </>
   );
 }
