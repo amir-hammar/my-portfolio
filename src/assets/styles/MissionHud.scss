@@ -114,20 +114,32 @@
   }
 }
 // The number is the constant: always shown, always the brightest thing in the
-// pill after the star itself.
+// pill after the star itself. It sits tight against the star so the two read as
+// one unit (a star and its total), with the sentence fenced off after it.
 .like-count {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
+  line-height: 1;
   color: var(--white);
   white-space: nowrap;
   user-select: none;
+  // Fixed-width digits, so the pill doesn't twitch when the total ticks over
+  // (3 to 4, or 99 to 100).
+  font-variant-numeric: tabular-nums;
+  margin-left: -2px;
 }
 
 // The message beside it is secondary. It brightens slightly while it is still
 // asking for a star, then settles once the star has been given.
+//
+// The hairline rule is what stops the count reading as the first word of the
+// sentence: without it the number and the text ran together as one line of
+// prose, and the total stopped looking like a figure.
 .like-message {
+  padding-left: 11px;
+  border-left: 1px solid var(--line);
   font-family: var(--mono);
   font-size: 10.5px;
   letter-spacing: 0.06em;

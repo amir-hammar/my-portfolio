@@ -18,12 +18,12 @@ i18n
           },
 
           hud: {
-            invite: "Drop a like if you like what you see!",
-            thanks: "Thanks for the star!",
-            protest1: "Too late, no takebacks!",
-            protest2: "Wait, please reconsider...",
-            protest3: "Okay, I am begging you now.",
-            surrendered: "Fine. It is gone. I am fine.",
+            invite: "Drop a like if you like what you see! 👀",
+            thanks: "Thanks for the star! 🙏",
+            protest1: "Too late, no takebacks! 😄",
+            protest2: "Wait, please reconsider... 🥺",
+            protest3: "Okay, I am begging you now. 😭",
+            surrendered: "Fine. It is gone. I am fine. 💔",
             failed: "signal lost"
           },
 
@@ -290,7 +290,17 @@ i18n
             title: "Get in Touch",
             description: "Have a project in mind, a role to fill, or just want to talk shop? Reach out whichever way suits you. I read both.",
             linkedinButton: "Message me on LinkedIn",
-            emailButton: "Send an email"
+            emailButton: "Send an email",
+            tabReach: "Reach out",
+            tabFeedback: "Leave feedback",
+            feedbackLead: "No message needed. Tap whatever fits, and thanks for stopping by.",
+            feedbackHint: "Tap again to undo",
+            reactions: {
+              design: "Great design",
+              animations: "Loved the animations",
+              projects: "Impressive projects",
+              collab: "Would work with you"
+            }
           },
         },
       },
@@ -303,12 +313,12 @@ i18n
           },
 
           hud: {
-            invite: "Laissez un like si ça vous plaît !",
-            thanks: "Merci pour l'étoile !",
-            protest1: "Trop tard, on ne reprend pas !",
-            protest2: "Attendez, réfléchissez bien...",
-            protest3: "Là je supplie. Vraiment.",
-            surrendered: "Bon. C'est retiré. Tout va bien.",
+            invite: "Laissez un like si ça vous plaît ! 👀",
+            thanks: "Merci pour l'étoile ! 🙏",
+            protest1: "Trop tard, on ne reprend pas ! 😄",
+            protest2: "Attendez, réfléchissez bien... 🥺",
+            protest3: "Là je supplie. Vraiment. 😭",
+            surrendered: "Bon. C'est retiré. Tout va bien. 💔",
             failed: "signal perdu"
           },
 
@@ -575,7 +585,17 @@ i18n
             title: "Me Contacter",
             description: "Un projet en tête, un poste à pourvoir, ou simplement envie d'échanger ? Choisissez le canal qui vous convient, je lis les deux.",
             linkedinButton: "M'écrire sur LinkedIn",
-            emailButton: "Envoyer un courriel"
+            emailButton: "Envoyer un courriel",
+            tabReach: "Me joindre",
+            tabFeedback: "Laisser un avis",
+            feedbackLead: "Pas besoin d'écrire. Cliquez ce qui vous parle, et merci du passage.",
+            feedbackHint: "Cliquez à nouveau pour annuler",
+            reactions: {
+              design: "Beau design",
+              animations: "Super animations",
+              projects: "Projets impressionnants",
+              collab: "Envie de collaborer"
+            }
           },
 
         },
