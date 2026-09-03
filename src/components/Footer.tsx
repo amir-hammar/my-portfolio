@@ -2,12 +2,17 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import "../assets/styles/Footer.scss";
 import { useTranslation } from "react-i18next";
+import FeedbackReactions from "./FeedbackReactions";
 
 function Footer() {
   const { t } = useTranslation();
 
   return (
     <footer>
+      <div className="footer-feedback">
+        <FeedbackReactions />
+      </div>
+
       <div className="footer-socials">
         <a
           className="social-orb"
