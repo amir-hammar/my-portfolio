@@ -3,7 +3,6 @@ import {
   faChartLine,
   faCubesStacked,
   faCode,
-  faCubes,
   faDatabase,
   faDiagramProject,
   faGaugeHigh,
@@ -32,6 +31,9 @@ import lokiLogo from "../assets/images/logos/tech/grafana-loki.svg";
 import mockitoLogo from "../assets/images/logos/tech/mockito.png";
 import tempoLogo from "../assets/images/logos/tech/grafana-tempo.svg";
 import xunitLogo from "../assets/images/logos/tech/xunit.png";
+// Also not in devicon; pulled from dashboardicons.com (homarr-labs/dashboard-icons).
+import claudeLogo from "../assets/images/logos/tech/claude.svg";
+import githubCopilotLogo from "../assets/images/logos/tech/github-copilot.svg";
 import bigqueryLogo from "devicon/icons/googlecloud/googlecloud-original.svg";
 import cppLogo from "devicon/icons/cplusplus/cplusplus-original.svg";
 import csharpLogo from "devicon/icons/csharp/csharp-original.svg";
@@ -131,9 +133,15 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { key: "html", logo: htmlLogo },
       { key: "css", logo: cssLogo },
       { key: "entityFramework", logo: efLogo },
+      { key: "claudeCode", logo: claudeLogo },
+      // Copilot's source mark is fill="currentColor" — meaningless once loaded
+      // as a standalone <img> — so the file has a fixed fill baked in directly.
+      // Pure black rather than GitHub's #181616: against this dark panel the
+      // difference is the only thing keeping the hover reveal visible at all.
+      { key: "githubCopilot", logo: githubCopilotLogo },
       { key: "restfulApi", glyph: faRightLeft },
       { key: "apiIntegration", glyph: faPlug },
-      { key: "objectOrientedProgramming", glyph: faCubes },
+      { key: "objectOrientedProgramming", mark: "OOP" },
       { key: "cleanArchitecture", glyph: faCubesStacked },
       { key: "microservices", glyph: faSitemap },
     ],

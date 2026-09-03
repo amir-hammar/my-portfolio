@@ -374,34 +374,6 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
     }
   }
 
-  const starCv = document.createElement("canvas");
-  starCv.width = starCv.height = 128;
-  const scx = starCv.getContext("2d")!;
-  const sgrad = scx.createRadialGradient(64, 64, 0, 64, 64, 64);
-  sgrad.addColorStop(0.0, "rgba(255,255,255,1)");
-  sgrad.addColorStop(0.13, "rgba(224,236,255,.9)");
-  sgrad.addColorStop(0.4, "rgba(100,150,255,.28)");
-  sgrad.addColorStop(1.0, "rgba(59,107,240,0)");
-  scx.fillStyle = sgrad;
-  scx.fillRect(0, 0, 128, 128);
-  const starTex = new THREE.CanvasTexture(starCv);
-
-  const sprite = (color: number, scale: number, opacity?: number) => {
-    const s = new THREE.Sprite(
-      new THREE.SpriteMaterial({
-        map: starTex,
-        color,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        transparent: true,
-        opacity: opacity === undefined ? 1 : opacity,
-        fog: false,
-      })
-    );
-    s.scale.setScalar(scale);
-    return s;
-  };
-
   // Depth at which the hero's shooting stars sit. This constant also used to
   // position the per-section destination objects (globular cluster, nebula,
   // constellation, binary pair); those were removed on request, leaving the
@@ -608,7 +580,6 @@ export function createGalaxyScene(canvas: HTMLCanvasElement): GalaxyScene | null
       streaks.geometry.dispose();
       (streaks.material as THREE.Material).dispose();
       streakTex.dispose();
-      starTex.dispose();
       renderer!.dispose();
     },
     isSoftware,

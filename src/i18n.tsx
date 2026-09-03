@@ -51,9 +51,11 @@ i18n
                 html: "HTML",
                 css: "CSS",
                 entityFramework: "Entity Framework",
+                claudeCode: "Claude Code",
+                githubCopilot: "GitHub Copilot",
                 restfulApi: "RESTful APIs",
                 apiIntegration: "API Integration",
-                objectOrientedProgramming: "Object Oriented Programming",
+                objectOrientedProgramming: "Object-Oriented Programming",
                 cleanArchitecture: "Clean Architecture",
                 microservices: "Microservices",
               },
@@ -291,15 +293,15 @@ i18n
             description: "Have a project in mind, a role to fill, or just want to talk shop? Reach out whichever way suits you. I read both.",
             linkedinButton: "Message me on LinkedIn",
             emailButton: "Send an email",
-            tabReach: "Reach out",
-            tabFeedback: "Leave feedback",
             feedbackLead: "No message needed. Tap whatever fits, and thanks for stopping by.",
             feedbackHint: "Tap again to undo",
             reactions: {
               design: "Great design",
               animations: "Loved the animations",
               projects: "Impressive projects",
-              collab: "Would work with you"
+              collab: "Would work with you",
+              bugs: "Found a bug",
+              confusing: "A bit confusing"
             }
           },
         },
@@ -346,6 +348,8 @@ i18n
                 html: "HTML",
                 css: "CSS",
                 entityFramework: "Entity Framework",
+                claudeCode: "Claude Code",
+                githubCopilot: "GitHub Copilot",
                 restfulApi: "APIs RESTful",
                 apiIntegration: "Intégration d'API",
                 objectOrientedProgramming: "Programmation Orientée Objet",
@@ -586,15 +590,15 @@ i18n
             description: "Un projet en tête, un poste à pourvoir, ou simplement envie d'échanger ? Choisissez le canal qui vous convient, je lis les deux.",
             linkedinButton: "M'écrire sur LinkedIn",
             emailButton: "Envoyer un courriel",
-            tabReach: "Me joindre",
-            tabFeedback: "Laisser un avis",
             feedbackLead: "Pas besoin d'écrire. Cliquez ce qui vous parle, et merci du passage.",
             feedbackHint: "Cliquez à nouveau pour annuler",
             reactions: {
               design: "Beau design",
               animations: "Super animations",
               projects: "Projets impressionnants",
-              collab: "Envie de collaborer"
+              collab: "Envie de collaborer",
+              bugs: "J'ai trouvé un bug",
+              confusing: "Un peu confus"
             }
           },
 

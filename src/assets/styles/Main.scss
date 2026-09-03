@@ -419,8 +419,13 @@ h1.name {
   font-size: clamp(12px, 1.5vw, 16px);
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--white);
+  opacity: 0.88;
   font-family: var(--mono);
+  // A dark halo, not just a brighter color — the galaxy behind this text
+  // varies from black sky to bright milky-way band, so contrast has to hold
+  // up against both, not just against a plain dark background.
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 12px rgba(0, 0, 0, 0.7);
 }
 
 .school {
@@ -445,8 +450,10 @@ h1.name {
     font-family: var(--mono);
     font-size: 10.5px;
     letter-spacing: 0.12em;
-    color: var(--muted);
+    color: var(--white);
+    opacity: 0.85;
     text-transform: uppercase;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 12px rgba(0, 0, 0, 0.7);
   }
 }
 

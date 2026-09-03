@@ -12,6 +12,9 @@ const REACTIONS = [
   { id: "animations", emoji: "✨" },
   { id: "projects", emoji: "💼" },
   { id: "collab", emoji: "🤝" },
+  // Not every reaction is a compliment — an all-positive board reads as fake.
+  { id: "bugs", emoji: "🐛" },
+  { id: "confusing", emoji: "🤔" },
 ] as const;
 
 type Counts = Record<string, number>;

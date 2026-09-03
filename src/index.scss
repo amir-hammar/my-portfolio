@@ -753,3 +753,17 @@ h6,
     transition: none;
   }
 }
+
+// Touch-only devices can't hover at all — `:hover` styles only ever get
+// there via a tap, which either does nothing (most modern mobile browsers)
+// or, on some Android WebViews, sticks until the next tap elsewhere. Either
+// way, the *animated* transition into that state is never something a touch
+// user intended to trigger, so it's killed globally here rather than only in
+// the handful of places the site defines its own hover transitions. `(hover:
+// hover)` — not a max-width breakpoint — because a touchscreen laptop with a
+// mouse attached genuinely can hover; screen size alone can't tell you that.
+@media (hover: none) {
+  * {
+    transition: none !important;
+  }
+}
