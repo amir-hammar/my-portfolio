@@ -71,6 +71,9 @@ import prometheusLogo from "devicon/icons/prometheus/prometheus-original.svg";
 import pycharmLogo from "devicon/icons/pycharm/pycharm-original.svg";
 import pythonLogo from "devicon/icons/python/python-original.svg";
 import reactLogo from "devicon/icons/react/react-original.svg";
+// devicon ships a dedicated React Native file, though it is the same atom as
+// React's - the two products share a mark, so the tiles look alike by design.
+import reactNativeLogo from "devicon/icons/reactnative/reactnative-original.svg";
 import redisLogo from "devicon/icons/redis/redis-original.svg";
 import rustLogo from "devicon/icons/rust/rust-original.svg";
 import typescriptLogo from "devicon/icons/typescript/typescript-original.svg";
@@ -164,6 +167,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     icon: faPuzzlePiece,
     skills: [
       { key: "reactjs", logo: reactLogo },
+      { key: "reactNative", logo: reactNativeLogo },
       { key: "nodejs", logo: nodejsLogo },
       { key: "kafka", logo: kafkaLogo },
       { key: "nginx", logo: nginxLogo },

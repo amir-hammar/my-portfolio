@@ -62,6 +62,7 @@ i18n
               title: "Frameworks & Libraries",
               skills: {
                 reactjs: "React.js",
+                reactNative: "React Native",
                 tkinter: "Tkinter",
                 kafka: "Kafka",
                 nodejs: "Node.js",
@@ -357,6 +358,7 @@ i18n
               title: "Frameworks et Bibliothèques",
               skills: {
                 reactjs: "React.js",
+                reactNative: "React Native",
                 tkinter: "Tkinter",
                 kafka: "Kafka",
                 nodejs: "Node.js",
