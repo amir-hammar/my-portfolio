@@ -51,8 +51,20 @@ i18n
                 html: "HTML",
                 css: "CSS",
                 entityFramework: "Entity Framework",
+              },
+            },
+            aiTools: {
+              title: "AI Tools",
+              skills: {
                 claudeCode: "Claude Code",
                 githubCopilot: "GitHub Copilot",
+                cursor: "Cursor",
+                replit: "Replit",
+              },
+            },
+            concepts: {
+              title: "Concepts",
+              skills: {
                 restfulApi: "RESTful APIs",
                 apiIntegration: "API Integration",
                 objectOrientedProgramming: "Object-Oriented Programming",
@@ -350,8 +362,20 @@ i18n
                 html: "HTML",
                 css: "CSS",
                 entityFramework: "Entity Framework",
+              },
+            },
+            aiTools: {
+              title: "Outils IA",
+              skills: {
                 claudeCode: "Claude Code",
                 githubCopilot: "GitHub Copilot",
+                cursor: "Cursor",
+                replit: "Replit",
+              },
+            },
+            concepts: {
+              title: "Concepts",
+              skills: {
                 restfulApi: "APIs RESTful",
                 apiIntegration: "Intégration d'API",
                 objectOrientedProgramming: "Programmation Orientée Objet",

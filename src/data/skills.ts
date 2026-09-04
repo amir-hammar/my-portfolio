@@ -10,6 +10,7 @@ import {
   faPlug,
   faPuzzlePiece,
   faRightLeft,
+  faRobot,
   faScrewdriverWrench,
   faSitemap,
   faTableColumns,
@@ -34,6 +35,12 @@ import xunitLogo from "../assets/images/logos/tech/xunit.png";
 // Also not in devicon; pulled from dashboardicons.com (homarr-labs/dashboard-icons).
 import claudeLogo from "../assets/images/logos/tech/claude.svg";
 import githubCopilotLogo from "../assets/images/logos/tech/github-copilot.svg";
+// Not in devicon, dashboard-icons, or any icon set checked. Pulled directly
+// from cursor.com's own favicon.svg (512x512, official). Like xUnit, it is a
+// two-tone mark rather than a flat silhouette - 72% dark fill, 28% light edge
+// - so it uses the same `monochrome` treatment: a plain invert() rather than
+// brightness(0)invert(1), which would flatten the two tones into one blob.
+import cursorLogo from "../assets/images/logos/tech/cursor.svg";
 import bigqueryLogo from "devicon/icons/googlecloud/googlecloud-original.svg";
 import cppLogo from "devicon/icons/cplusplus/cplusplus-original.svg";
 import csharpLogo from "devicon/icons/csharp/csharp-original.svg";
@@ -73,6 +80,7 @@ import postgresqlLogo from "devicon/icons/postgresql/postgresql-original.svg";
 import prometheusLogo from "devicon/icons/prometheus/prometheus-original.svg";
 import pycharmLogo from "devicon/icons/pycharm/pycharm-original.svg";
 import pythonLogo from "devicon/icons/python/python-original.svg";
+import replitLogo from "devicon/icons/replit/replit-original.svg";
 import reactLogo from "devicon/icons/react/react-original.svg";
 // devicon ships a dedicated React Native file, though it is the same atom as
 // React's - the two products share a mark, so the tiles look alike by design.
@@ -137,12 +145,26 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { key: "html", logo: htmlLogo },
       { key: "css", logo: cssLogo },
       { key: "entityFramework", logo: efLogo },
+    ],
+  },
+  {
+    id: "aiTools",
+    icon: faRobot,
+    skills: [
       { key: "claudeCode", logo: claudeLogo },
       // Copilot's source mark is fill="currentColor" — meaningless once loaded
       // as a standalone <img> — so the file has a fixed fill baked in directly.
       // Pure black rather than GitHub's #181616: against this dark panel the
       // difference is the only thing keeping the hover reveal visible at all.
       { key: "githubCopilot", logo: githubCopilotLogo },
+      { key: "cursor", logo: cursorLogo, monochrome: true },
+      { key: "replit", logo: replitLogo },
+    ],
+  },
+  {
+    id: "concepts",
+    icon: faCubesStacked,
+    skills: [
       { key: "restfulApi", glyph: faRightLeft },
       { key: "apiIntegration", glyph: faPlug },
       { key: "objectOrientedProgramming", mark: "OOP" },
