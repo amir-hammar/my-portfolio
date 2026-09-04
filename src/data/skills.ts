@@ -65,6 +65,7 @@ import mysqlLogo from "devicon/icons/mysql/mysql-original.svg";
 import powerbiLogo from "../assets/images/logos/tech/powerbi.svg";
 import nginxLogo from "devicon/icons/nginx/nginx-original.svg";
 import nodejsLogo from "devicon/icons/nodejs/nodejs-original.svg";
+import expoLogo from "devicon/icons/expo/expo-original.svg";
 import numpyLogo from "devicon/icons/numpy/numpy-original.svg";
 import opentelemetryLogo from "devicon/icons/opentelemetry/opentelemetry-original.svg";
 import pandasLogo from "devicon/icons/pandas/pandas-original.svg";
@@ -177,6 +178,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { key: "reactjs", logo: reactLogo },
       { key: "reactNative", logo: reactNativeLogo },
       { key: "nodejs", logo: nodejsLogo },
+      { key: "expo", logo: expoLogo },
       { key: "kafka", logo: kafkaLogo },
       { key: "nginx", logo: nginxLogo },
       { key: "krakend", logo: krakendLogo },
