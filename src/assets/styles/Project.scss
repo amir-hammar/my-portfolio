@@ -115,7 +115,7 @@
   min-width: 0;
 
   h2 {
-    margin: 0 0 0.5em;
+    margin: 0 0 0.4em;
     font-size: clamp(1.3rem, 2.4vw, 1.9rem);
     letter-spacing: -0.01em;
     line-height: 1.15;
@@ -135,6 +135,13 @@
 @media (max-width: 700px) {
   .project-media {
     aspect-ratio: 4 / 3;
+  }
+
+  // Portfolio and Class Management's shots are ~2.3-2.5 wide — cropping
+  // them to the generic 4:3 mobile frame throws away most of the width and
+  // reads as zoomed in. A wider frame keeps far more of the composition.
+  .wide-media {
+    aspect-ratio: 2 / 1;
   }
 
   .project-inset {
@@ -163,4 +170,435 @@
   .project-inset:hover {
     transform: none;
   }
+}
+
+// ─── CoeurSolidaire showcase ──────────────────────────────────────────────
+// The desktop shots are 1440x900 (ratio 1.6) - much closer to square than a
+// photo. In the site's default 16:7 (~2.29) row, `object-fit: cover` had to
+// crop about 30% of the screenshot's height to fill that width, which read as
+// zoomed in rather than cropped. 16:9 (1.78) cuts that to ~10%, without this
+// one row towering over the others the way matching the source ratio (16:10)
+// exactly would have.
+.coeur-media {
+  aspect-ratio: 16 / 9;
+}
+
+// The mobile shots here are 780x1688 (ratio ~0.46) — much taller/narrower
+// than every other project's inset (close to 4:3). Sized by height instead
+// of the generic width-based `.project-inset`, or it would overflow the row.
+.coeur-inset {
+  width: auto;
+  height: 82%;
+  right: 4%;
+  bottom: 6%;
+}
+
+// The portfolio row's own screenshot is portrait, same shape as the coeur
+// mobile shots (~0.46 ratio) — sized by height for the same reason.
+.portfolio-inset {
+  width: auto;
+  height: 78%;
+  right: 3%;
+  bottom: 6%;
+}
+
+.coeur-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+// Same segmented-pill vocabulary as the language switch and the contact tabs.
+// A backing fill is necessary here specifically because these tabs sit over a
+// live app screenshot whose own background flips between dark and light with
+// the theme toggle — without it the pill would lose all contrast half the time.
+.coeur-tabs {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid rgba(122, 160, 255, 0.22);
+  background: rgba(4, 7, 18, 0.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  // CoeurSolidaire only ever has 3 tabs, but CanBankX reuses this same pill
+  // with 5 — scroll rather than silently clip once they no longer fit the
+  // frame at narrow widths.
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.coeur-tab {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--muted);
+  transition: color 0.3s ease, background 0.3s ease, transform 0.25s ease;
+
+  &.is-active {
+    color: var(--white);
+    background: linear-gradient(135deg, var(--royal), var(--royal-hi));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 2px;
+  }
+}
+
+// Desktop-only: a tab needs to visibly react to the pointer, or it reads as
+// part of the underlying screenshot rather than a control sitting on top of
+// it. `(hover: hover)` rather than a max-width query, because the real
+// distinction is pointer capability, not viewport size — and gating it this
+// way means no lingering "stuck" hover state after a tap on touch devices,
+// which don't get this rule at all.
+@media (hover: hover) {
+  .coeur-tab:not(.is-active):hover {
+    color: var(--white);
+    background: rgba(122, 160, 255, 0.22);
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coeur-tab {
+    transition: color 0.3s ease, background 0.3s ease;
+  }
+
+  .coeur-tab:not(.is-active):hover {
+    transform: none;
+  }
+}
+
+.coeur-theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(122, 160, 255, 0.22);
+  background: rgba(4, 7, 18, 0.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--white);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    border-color: var(--royal-hi);
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 640px) {
+  .coeur-tab {
+    padding: 6px 9px;
+    font-size: 0.68rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coeur-theme-toggle {
+    transition: border-color 0.3s ease;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// ─── Date / type meta ─────────────────────────────────────────────────────
+// Resume-style: when it happened and what kind of project it was, both
+// ahead of the stack chips so the row reads top-to-bottom the way a resume
+// entry does (heading, meta, then detail).
+.project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+.project-date {
+  color: var(--muted);
+}
+
+.project-type {
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 201, 76, 0.35);
+  background: rgba(242, 201, 76, 0.08);
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+// ─── Stack chips ──────────────────────────────────────────────────────────
+// Named up front, resume style, so the paragraph underneath can describe what
+// the project is without stopping to list technologies.
+.project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(122, 160, 255, 0.2);
+    background: rgba(122, 160, 255, 0.07);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    color: var(--royal-hi);
+    white-space: nowrap;
+  }
+}
+
+// ─── Work in progress placeholder ─────────────────────────────────────────
+// Fills the media frame for a project with no interface yet. A real card
+// rather than a mocked-up screenshot: inventing a UI that does not exist
+// would misrepresent the work.
+.wip-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  text-align: center;
+  background: radial-gradient(
+      90% 70% at 50% 0%,
+      rgba(59, 107, 240, 0.16),
+      transparent 62%
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(122, 160, 255, 0.045) 0 12px,
+      transparent 12px 24px
+    );
+}
+
+.wip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 201, 76, 0.42);
+  background: rgba(242, 201, 76, 0.1);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.wip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: wip-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes wip-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.78); }
+}
+
+.wip-eta {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wip-dot {
+    animation: none;
+  }
+}
+
+// ─── Confidential placeholder (Stingray) ──────────────────────────────────
+// A redacted-document look for a project built under NDA — communicates
+// "there really is nothing to show" more honestly than a broken image would.
+.confidential-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  text-align: center;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(122, 160, 255, 0.045) 0 12px,
+    transparent 12px 24px
+  );
+}
+
+.confidential-stamp {
+  padding: 8px 20px;
+  border: 2px solid rgba(255, 107, 107, 0.55);
+  border-radius: 4px;
+  transform: rotate(-6deg);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 107, 107, 0.85);
+}
+
+.confidential-doc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(320px, 80%);
+}
+
+.confidential-line {
+  height: 10px;
+  border-radius: 3px;
+  background: rgba(230, 235, 250, 0.16);
+}
+
+.confidential-note {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+// ─── FreeEaTS placeholder ──────────────────────────────────────────────────
+// No UI of its own — the whole point is a synced calendar. A mock of that
+// one event stands in for a screenshot rather than inventing a UI.
+.free-eats-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  text-align: center;
+  background: radial-gradient(90% 70% at 50% 0%, rgba(59, 107, 240, 0.16), transparent 62%);
+}
+
+.free-eats-scan {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.free-eats-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--royal-hi);
+  animation: wip-pulse 1.8s ease-in-out infinite;
+}
+
+.free-eats-event {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: min(280px, 82%);
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(122, 160, 255, 0.25);
+  background: rgba(4, 8, 20, 0.65);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+}
+
+.free-eats-event-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+.free-eats-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+.free-eats-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.free-eats-added {
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(122, 160, 255, 0.3);
+  background: rgba(122, 160, 255, 0.1);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  color: var(--royal-hi);
+}
+
+.free-eats-badge {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(122, 160, 255, 0.35);
+  background: rgba(122, 160, 255, 0.08);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--royal-hi);
 }

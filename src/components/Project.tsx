@@ -5,6 +5,11 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../assets/styles/Project.scss";
 import { useTranslation } from "react-i18next";
+import CoeurSolidaireShowcase from "./CoeurSolidaireShowcase";
+import WorkInProgressMedia from "./WorkInProgressMedia";
+import CanBankXShowcase from "./CanBankXShowcase";
+import ConfidentialMedia from "./ConfidentialMedia";
+import FreeEatsMedia from "./FreeEatsMedia";
 
 import digiclipseMain from "../assets/images/projects/digiclipse_main.webp";
 import digiclipseShowcase from "../assets/images/projects/digiclipse_showcase.webp";
@@ -16,29 +21,135 @@ import voiceTranslator from "../assets/images/projects/voice_translator.webp";
 import sscMain from "../assets/images/projects/ssc_main.webp";
 import sscSettings from "../assets/images/projects/ssc_settings.webp";
 import sga from "../assets/images/projects/sga.webp";
-import portfolio from "../assets/images/projects/portfolio.webp";
+import PortfolioShowcase from "./PortfolioShowcase";
 
 gsap.registerPlugin(ScrollTrigger);
+
+/** Looked up as `projects.types.<key>` — the label text lives in i18n since
+ *  it differs by language, this key doesn't. */
+type ProjectType = "freelance" | "school" | "involvement" | "personal" | "professional";
 
 type ProjectEntry = {
   /** i18n key under `projects.*` */
   id: string;
-  /** Primary full-bleed image. Omitted for the video entry. */
+  /** Primary full-bleed image. Omitted for the video entry or a custom media component. */
   image?: string;
   /** Optional second shot, insetted over the primary one. */
   inset?: string;
   video?: { src: string; poster: string };
+  /** Renders in place of the plain image/inset pair, for a project whose media
+   *  needs its own interactive behaviour (role tabs, a theme toggle) or has no
+   *  interface to show yet. */
+  media?: () => JSX.Element;
+  /** Shown as chips above the copy. Kept here rather than in i18n: these are
+   *  product names, identical in both languages, so translating them would
+   *  mean maintaining two copies of the same list. */
+  stack: string[];
+  /** How the project came about — freelance work, a school assignment, a
+   *  club, personal initiative, or a professional/internship deliverable. */
+  type: ProjectType;
 };
 
 const PROJECTS: ProjectEntry[] = [
-  { id: "digiclipse", image: digiclipseMain, inset: digiclipseShowcase },
-  { id: "arcade", video: { src: arcadeVideo, poster: arcadeThumbnail } },
-  { id: "aspire", image: aspire },
-  { id: "database", image: database },
-  { id: "voiceTranslator", image: voiceTranslator },
-  { id: "dataUpdater", image: sscMain, inset: sscSettings },
-  { id: "classManagement", image: sga },
-  { id: "portfolio", image: portfolio },
+  // Most recent client work leads the list.
+  {
+    id: "coeurSolidaire",
+    media: CoeurSolidaireShowcase,
+    stack: [
+      "C#",
+      "ASP.NET Core",
+      "React Native",
+      "Expo",
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+    ],
+    type: "freelance",
+  },
+  {
+    id: "marketFlipper",
+    media: WorkInProgressMedia,
+    stack: [
+      "C#",
+      "ASP.NET Core",
+      "React Native",
+      "PostgreSQL",
+      "Redis",
+      "Supabase",
+      "Hangfire",
+      "xUnit",
+      "Docker",
+    ],
+    type: "freelance",
+  },
+  {
+    id: "canBankX",
+    media: CanBankXShowcase,
+    stack: ["React", "TypeScript", "Rust", "PostgreSQL", "Redis", "Keycloak", "KrakenD", "Docker"],
+    type: "school",
+  },
+  {
+    id: "digiclipse",
+    image: digiclipseMain,
+    inset: digiclipseShowcase,
+    stack: ["Python", "Pandas", "Docker", "REST APIs"],
+    type: "involvement",
+  },
+  {
+    id: "arcade",
+    video: { src: arcadeVideo, poster: arcadeThumbnail },
+    stack: ["Arduino", "C++", "Electronics"],
+    type: "school",
+  },
+  {
+    id: "portfolio",
+    media: PortfolioShowcase,
+    stack: ["React", "TypeScript", "Three.js", "GSAP", "Vite", "SASS"],
+    type: "personal",
+  },
+  {
+    id: "stingray",
+    media: ConfidentialMedia,
+    stack: ["Java", "Google Cloud Platform", "Apache Beam", "BigQuery", "Jira"],
+    type: "professional",
+  },
+  {
+    id: "dataUpdater",
+    image: sscMain,
+    inset: sscSettings,
+    stack: ["Python", "customTkinter", "Excel"],
+    type: "professional",
+  },
+  {
+    id: "freeEats",
+    media: FreeEatsMedia,
+    stack: ["Python", "Google Calendar API"],
+    type: "personal",
+  },
+  {
+    id: "aspire",
+    image: aspire,
+    stack: ["Python", "OpenAI GPT 3", "REST APIs"],
+    type: "personal",
+  },
+  {
+    id: "database",
+    image: database,
+    stack: ["MariaDB", "SQL", "Raspberry Pi", "HTML/CSS"],
+    type: "school",
+  },
+  {
+    id: "voiceTranslator",
+    image: voiceTranslator,
+    stack: ["Python", "OpenAI Whisper", "NumPy", "REST APIs"],
+    type: "personal",
+  },
+  {
+    id: "classManagement",
+    image: sga,
+    stack: ["TypeScript", "Pug", "CSS"],
+    type: "school",
+  },
 ];
 
 function Project() {
@@ -118,8 +229,21 @@ function Project() {
       <ol className="projects-list" ref={listRef}>
         {PROJECTS.map((project, i) => (
           <li className="project" key={project.id}>
-            <div className="project-media">
-              {project.video ? (
+            <div
+              className={`project-media${
+                project.id === "coeurSolidaire" ? " coeur-media" : ""
+              }${
+                // These two source shots are far wider than the generic
+                // mobile 4:3 frame (2.29 and 2.49 vs 1.33), so cover crops
+                // almost all of the width away and reads as zoomed in.
+                project.id === "portfolio" || project.id === "classManagement"
+                  ? " wide-media"
+                  : ""
+              }`}
+            >
+              {project.media ? (
+                <project.media />
+              ) : project.video ? (
                 <video
                   ref={videoRef}
                   src={project.video.src}
@@ -149,11 +273,25 @@ function Project() {
               </span>
               <div className="project-copy">
                 <h2>{t(`projects.${project.id}.title`)}</h2>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: t(`projects.${project.id}.description`),
-                  }}
-                />
+
+                {/* Resume-style meta: when it happened and what kind of
+                    project it was, both read straight from i18n since the
+                    date format and type label differ by language. */}
+                <div className="project-meta">
+                  <span className="project-date">{t(`projects.${project.id}.date`)}</span>
+                  <span className="project-type">{t(`projects.types.${project.type}`)}</span>
+                </div>
+
+                {/* Stack first, as its own row of chips — the copy underneath
+                    is then free to explain what the thing actually is instead
+                    of listing technologies mid-sentence. */}
+                <ul className="project-stack">
+                  {project.stack.map((tech) => (
+                    <li key={tech}>{tech}</li>
+                  ))}
+                </ul>
+
+                <p>{t(`projects.${project.id}.description`)}</p>
               </div>
             </div>
           </li>

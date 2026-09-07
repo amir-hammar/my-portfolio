@@ -31,7 +31,9 @@ function GalaxyHero() {
     let flightTween: gsap.core.Tween | null = null;
     let velocityTrigger: ScrollTrigger | null = null;
 
-    if (reducedMotion || scene.isSoftware) {
+    const isStatic = reducedMotion || scene.isSoftware;
+
+    if (isStatic) {
       scene.render(6);
     } else {
       const flight = { p: 0 };
@@ -66,6 +68,12 @@ function GalaxyHero() {
     // reflow, container resize) — not just window resize.
     const ro = new ResizeObserver(() => {
       scene.resize();
+      // In static mode the single render above already happened, before this
+      // observer had sized the drawing buffer — and there's no animation loop
+      // to redraw it afterwards, so the sky stayed blank for the whole visit.
+      // Anyone on a software renderer or with reduced motion on saw an empty
+      // background until now.
+      if (isStatic) scene.render(6);
       ScrollTrigger.refresh();
     });
     ro.observe(canvas);

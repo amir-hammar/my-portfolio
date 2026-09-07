@@ -16,7 +16,14 @@
 
 body {
   margin: 0;
-  background-color: #03050d;
+  // !important, and it matters more than it looks: CssBaseline also sets
+  // `background-color: #fff` from MUI's default light palette. The galaxy
+  // canvas normally paints over it so nobody notices — but the moment WebGL
+  // is unavailable (old device, WebGL disabled, GPU blocklisted) the canvas
+  // is transparent and the page fell back to white text on a white page.
+  // GalaxyHero's "CSS fallback background shows through" comment only became
+  // true once this line won the cascade.
+  background-color: #03050d !important;
   // !important because MUI's CssBaseline injects its own `body { font-family:
   // Roboto }` through emotion, which lands after this stylesheet and would
   // otherwise win for every element that just inherits from body. Same reason

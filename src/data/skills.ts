@@ -42,6 +42,7 @@ import githubCopilotLogo from "../assets/images/logos/tech/github-copilot.svg";
 // brightness(0)invert(1), which would flatten the two tones into one blob.
 import cursorLogo from "../assets/images/logos/tech/cursor.svg";
 import bigqueryLogo from "devicon/icons/googlecloud/googlecloud-original.svg";
+import cLogo from "devicon/icons/c/c-original.svg";
 import cppLogo from "devicon/icons/cplusplus/cplusplus-original.svg";
 import csharpLogo from "devicon/icons/csharp/csharp-original.svg";
 import cssLogo from "devicon/icons/css3/css3-original.svg";
@@ -136,6 +137,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     skills: [
       { key: "python", logo: pythonLogo },
       { key: "java", logo: javaLogo },
+      { key: "c", logo: cLogo },
       { key: "cpp", logo: cppLogo },
       { key: "csharp", logo: csharpLogo },
       { key: "dotnet", logo: dotnetLogo },
@@ -144,7 +146,6 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { key: "typescript", logo: typescriptLogo },
       { key: "html", logo: htmlLogo },
       { key: "css", logo: cssLogo },
-      { key: "entityFramework", logo: efLogo },
     ],
   },
   {
@@ -201,6 +202,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { key: "reactNative", logo: reactNativeLogo },
       { key: "nodejs", logo: nodejsLogo },
       { key: "expo", logo: expoLogo },
+      { key: "entityFramework", logo: efLogo },
       { key: "kafka", logo: kafkaLogo },
       { key: "nginx", logo: nginxLogo },
       { key: "krakend", logo: krakendLogo },

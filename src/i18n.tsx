@@ -42,6 +42,7 @@ i18n
               skills: {
                 python: "Python",
                 java: "Java",
+                c: "C",
                 cpp: "C++",
                 csharp: "C#",
                 dotnet: ".NET",
@@ -50,7 +51,6 @@ i18n
                 typescript: "TypeScript",
                 html: "HTML",
                 css: "CSS",
-                entityFramework: "Entity Framework",
               },
             },
             aiTools: {
@@ -67,7 +67,7 @@ i18n
               skills: {
                 restfulApi: "RESTful APIs",
                 apiIntegration: "API Integration",
-                objectOrientedProgramming: "Object-Oriented Programming",
+                objectOrientedProgramming: "Object Oriented Programming",
                 cleanArchitecture: "Clean Architecture",
                 microservices: "Microservices",
               },
@@ -81,6 +81,7 @@ i18n
                 kafka: "Kafka",
                 nodejs: "Node.js",
                 expo: "Expo",
+                entityFramework: "Entity Framework",
                 jquery: "JQuery",
                 nginx: "NGINX",
                 krakend: "KrakenD",
@@ -260,45 +261,108 @@ i18n
 
           projects: {
             title: "Projects",
+            types: {
+              freelance: "Startup Project",
+              school: "School Project",
+              involvement: "Club Involvement",
+              personal: "Personal Project",
+              professional: "Internship Project",
+            },
+            coeurSolidaire: {
+              title: "CoeurSolidaire",
+              date: "Jun 2026 – Present",
+              description:
+                "A platform for home care cooperatives, serving three kinds of user at once: coordinators who plan the visits, caregivers who carry them out on the road, and families who want to know how their relative is doing. Each role sees only what it should, enforced by the database itself rather than by the interface. It keeps working when the connection drops, which matters when caregivers spend the day moving between apartments.",
+              roles: {
+                dashboard: "Coordination",
+                calendar: "Family",
+                route: "Caregiver",
+              },
+              themeToggle: "Toggle app theme",
+            },
+            marketFlipper: {
+              title: "Market Flipper",
+              date: "Jul 2026 – Present",
+              description:
+                "A phone app that watches the second hand marketplaces so you do not have to. You save the searches you care about, and it keeps checking new listings across Craigslist, eBay, Kijiji and Facebook Marketplace, with more platforms planned. The matching runs on a schedule in the background, so an alert can reach you before you think to look.",
+              wipBadge: "In development",
+              wipEta: "Aiming for a store release in November 2026",
+            },
+            canBankX: {
+              title: "CanBankX",
+              date: "Winter 2026",
+              description:
+                "A banking web app built around real OAuth login, mandatory two factor setup, and identity verification before an account becomes active. Once approved, customers open chequing and savings accounts and send money to other users, all backed by independent services that keep balances consistent behind the scenes.",
+              roles: {
+                landing: "Landing",
+                mfa: "MFA",
+                home: "Home",
+                accounts: "Accounts",
+                transfer: "Transfer",
+              },
+            },
             digiclipse: {
               title: "DigiClipse",
+              date: "Dec 2023",
               description:
-                "Ensure the availability of parts by automating the extraction and verification of part numbers through Excel files and the Digikey API, while managing human errors using <b>Pandas</b>, <b>Python</b>, <b>Docker</b> and <b>APIs</b>.",
+                "A tool for a student engineering team that checks whether the electronic parts they plan to order can actually be bought. It reads the team's own part lists, queries the supplier, and reports back every day instead of someone looking each reference up by hand. It was built to survive messy spreadsheets, since dozens of people filled those lists in.",
             },
             arcade: {
               title: "Arcade",
+              date: "Fall 2022",
               description:
-                "Built an <b>arcade game</b> from scratch, designing both the <b>hardware</b> and <b>software</b>. Programmed <b>gameplay</b>, <b>UI</b>, <b>menus</b>, and <b>settings</b> while optimizing performance for a smooth experience. Applied skills in <b>game programming</b>, <b>Arduino</b>, <b>UI design</b>, <b>controller integration</b>, and <b>electronics</b>.",
-            },
-            aspire: {
-              title: "Aspire",
-              description:
-                "Develop a <b>voice assistant</b> named <b>Aspire</b> (still under development) for <b>computer control</b>. It enables users to <b>open applications</b>, <b>navigate the web</b>, and ask questions to <b>ChatGPT</b>. The project leverages <b>OpenAI GPT 3</b> and <b>Python</b>, utilizes <b>APIs</b> for integration, and incorporates <b>audio file management</b>.",
-            },
-            database: {
-              title: "Web Database Interface",
-              description:
-                "Set up a <b>web database interface</b> on a <b>Raspberry Pi</b> server with a <b>web interface</b> that simplifies <b>displaying</b>, <b>entering</b>, and <b>manipulating data</b>. Leveraging <b>web development</b> best practices, the project integrates <b>SQL</b> capabilities with a clear <b>user interface</b> and utilizes <b>MariaDB</b> for robust database management.",
-            },
-            voiceTranslator: {
-              title: "Voice Translator",
-              description:
-                "Developed a voice translator <b>built in Python</b> that converts <b>speech to text</b> using <b>OpenAI Whisper</b> and <b>NumPy</b> for processing, translates the extracted text into Japanese via an <b>external API</b>, and synthesizes the translated text back into <b>speech</b> using advanced speech processing techniques.",
-            },
-            dataUpdater: {
-              title: "Data Updater Application",
-              description:
-                "<b>Automate</b> the extraction, verification, and updating of email <b>data</b> in Excel based on selected dates and subjects, as part of my work at Shared Services Canada, using <b>Python</b>, <b>customTkinter</b> for the <b>GUI</b>, and <b>Excel query libraries</b> for seamless data integration.",
-            },
-            classManagement: {
-              title: "Class Management System",
-              description:
-                "Developed a <b>Class Management System</b> for the LOG210 course, engineered to <b>streamline</b> the management of <b>courses</b>, <b>students</b>, and other academic activities. Built with <b>TypeScript</b>, <b>Pug</b> and <b>CSS</b>.",
+                "An arcade machine built from nothing: the cabinet electronics, the controls, and the game running on them. The whole loop is custom, from reading the physical buttons through to the menus and the gameplay. It was as much an electronics project as a software one.",
             },
             portfolio: {
               title: "Portfolio Website",
+              date: "2025 – Present",
               description:
-                "Developed a personal website to showcase projects, skills, and experiences using <b>React</b>. Built with <b>TypeScript</b> on <b>HTML5</b> and styled with <b>SASS</b> to ensure a robust, responsive, and interactive design.",
+                "The site you are on right now. It presents my background, skills and projects as one continuous scene rather than a set of separate pages, with the camera travelling through space as you scroll. Everything on it is available in both English and French.",
+            },
+            stingray: {
+              title: "Data Pipeline Monitoring",
+              date: "Jan 2025 – Apr 2025",
+              description:
+                "A set of automated pipelines that clean and validate data before it reaches a media company's analytics platforms, built during my time at Stingray. It processes tens of gigabytes a day across dozens of tables, catching inconsistencies before they spread downstream. A monitoring layer watches several data sources at once and reports pipeline health automatically, so problems get noticed before anyone has to go looking.",
+              confidential: "Confidential",
+              confidentialNote: "Built under NDA, so no screenshots to show here.",
+            },
+            dataUpdater: {
+              title: "Data Updater Application",
+              date: "Fall 2024",
+              description:
+                "An internal tool built during my time at Shared Services Canada, where keeping contact data current meant opening several spreadsheets and checking them against each other by hand. It pulls the relevant emails, verifies each entry, and writes the corrections back on its own. It replaced a recurring manual chore and stayed in use by the team.",
+            },
+            freeEats: {
+              title: "FreeEaTS",
+              date: "Oct 2024",
+              description:
+                "A tool for ÉTS students that keeps track of campus events handing out free food, so nobody has to check every club's page by hand. It scans for new listings and syncs the matches straight into a shared Google Calendar. It has no interface of its own, since the calendar is the whole point.",
+              noInterface: "No interface",
+            },
+            aspire: {
+              title: "Aspire",
+              date: "Jun 2022",
+              description:
+                "A voice assistant for driving a computer by talking to it: opening applications, browsing the web, and answering questions out loud. It listens continuously, works out whether a phrase was meant for it, and acts only on the ones that were. Still an ongoing experiment rather than a finished product.",
+            },
+            database: {
+              title: "Web Database Interface",
+              date: "Winter 2023",
+              description:
+                "A small web interface running on a home server that makes a database usable by people who do not write queries. Records can be browsed, added and edited from any browser on the network. The exercise was putting a friendly surface over something that normally lives on a command line.",
+            },
+            voiceTranslator: {
+              title: "Voice Translator",
+              date: "Dec 2022",
+              description:
+                "A translator that works entirely by voice: you speak in one language and it answers out loud in another. It transcribes what it hears, translates the text, then synthesises the result back into speech. The goal was keeping the round trip quick enough to hold an actual conversation.",
+            },
+            classManagement: {
+              title: "Class Management System",
+              date: "Fall 2024",
+              description:
+                "A system for managing the academic side of a university course: the courses themselves, the students, and the schedules tying them together. It was a school project built for one of my classes.",
             },
           },
 
@@ -353,6 +417,7 @@ i18n
               skills: {
                 python: "Python",
                 java: "Java",
+                c: "C",
                 cpp: "C++",
                 csharp: "C#",
                 dotnet: ".NET",
@@ -361,7 +426,6 @@ i18n
                 typescript: "TypeScript",
                 html: "HTML",
                 css: "CSS",
-                entityFramework: "Entity Framework",
               },
             },
             aiTools: {
@@ -392,6 +456,7 @@ i18n
                 kafka: "Kafka",
                 nodejs: "Node.js",
                 expo: "Expo",
+                entityFramework: "Entity Framework",
                 jquery: "JQuery",
                 nginx: "NGINX",
                 krakend: "KrakenD",
@@ -571,45 +636,108 @@ i18n
 
           projects: {
             title: "Projets",
+            types: {
+              freelance: "Projet startup",
+              school: "Projet scolaire",
+              involvement: "Implication étudiante",
+              personal: "Projet personnel",
+              professional: "Projet de stage",
+            },
+            coeurSolidaire: {
+              title: "CoeurSolidaire",
+              date: "Juin 2026 – Présent",
+              description:
+                "Une plateforme pour les coopératives de soins à domicile, pensée pour trois publics à la fois : les coordonnateurs qui planifient les visites, les intervenants qui les réalisent sur la route, et les familles qui veulent savoir comment va leur proche. Chaque rôle ne voit que ce qui le concerne, une règle appliquée par la base de données elle-même et non par l'interface. L'application continue de fonctionner quand la connexion tombe, ce qui compte quand on passe la journée d'un appartement à l'autre.",
+              roles: {
+                dashboard: "Coordination",
+                calendar: "Famille",
+                route: "Intervenant",
+              },
+              themeToggle: "Changer le thème de l'application",
+            },
+            marketFlipper: {
+              title: "Market Flipper",
+              date: "Juil. 2026 – Présent",
+              description:
+                "Une application mobile qui surveille les marchés d'occasion à votre place. Vous enregistrez les recherches qui vous intéressent, et elle vérifie en continu les nouvelles annonces sur Craigslist, eBay, Kijiji et Facebook Marketplace, d'autres plateformes étant prévues. La mise en correspondance tourne en arrière-plan à intervalle régulier, si bien qu'une alerte peut vous parvenir avant même que vous pensiez à regarder.",
+              wipBadge: "En développement",
+              wipEta: "Sortie visée sur les stores en novembre 2026",
+            },
+            canBankX: {
+              title: "CanBankX",
+              date: "Hiver 2026",
+              description:
+                "Une application bancaire construite autour d'une vraie connexion OAuth, d'une double authentification obligatoire et d'une vérification d'identité avant qu'un compte ne devienne actif. Une fois approuvés, les clients ouvrent des comptes chèque et épargne et envoient de l'argent à d'autres utilisateurs, le tout appuyé par des services indépendants qui gardent les soldes cohérents en coulisses.",
+              roles: {
+                landing: "Accueil",
+                mfa: "MFA",
+                home: "Tableau de bord",
+                accounts: "Comptes",
+                transfer: "Virement",
+              },
+            },
             digiclipse: {
               title: "DigiClipse",
+              date: "Déc. 2023",
               description:
-                "Assurer la disponibilité des pièces en automatisant l'extraction et la vérification des numéros de pièces via des fichiers Excel et l'API Digikey, tout en gérant les erreurs humaines à l'aide de <b>Pandas</b>, <b>Python</b>, <b>Docker</b> et des <b>APIs</b>.",
+                "Un outil pour une équipe étudiante en génie qui vérifie si les composants électroniques qu'elle compte commander sont réellement disponibles. Il lit les listes de pièces de l'équipe, interroge le fournisseur et rend son rapport chaque jour, au lieu qu'une personne cherche chaque référence à la main. Il a été conçu pour encaisser des tableurs désordonnés, puisque des dizaines de personnes les remplissaient.",
             },
             arcade: {
               title: "Arcade",
+              date: "Automne 2022",
               description:
-                "Création d'un <b>jeu d'arcade</b> à partir de rien, conception du <b>matériel</b> et du <b>logiciel</b>. Programmation du <b>gameplay</b>, de l'<b>interface utilisateur</b>, des <b>menus</b> et des <b>paramètres</b> tout en optimisant les performances. Application des compétences en <b>programmation de jeux</b>, <b>Arduino</b>, <b>conception d'interface</b>, <b>intégration de contrôleur</b> et <b>électronique</b>.",
+                "Une borne d'arcade construite à partir de rien : l'électronique du meuble, les contrôles et le jeu qui tourne dessus. Toute la boucle est faite maison, de la lecture des boutons physiques jusqu'aux menus et au jeu lui-même. C'était autant un projet d'électronique que de logiciel.",
+            },
+            portfolio: {
+              title: "Site Portfolio",
+              date: "2025 – Présent",
+              description:
+                "Le site sur lequel vous êtes. Il présente mon parcours, mes compétences et mes projets comme une seule scène continue plutôt qu'une suite de pages séparées, la caméra traversant l'espace au fil du défilement. Tout y est disponible en français et en anglais.",
+            },
+            stingray: {
+              title: "Surveillance de pipelines de données",
+              date: "Janv. 2025 – Avr. 2025",
+              description:
+                "Un ensemble de pipelines automatisés qui nettoient et valident les données avant qu'elles n'atteignent les plateformes d'analyse d'une entreprise médiatique, développés lors de mon passage chez Stingray. Ils traitent des dizaines de gigaoctets par jour répartis sur des dizaines de tables, en repérant les incohérences avant qu'elles ne se propagent en aval. Une couche de surveillance observe plusieurs sources de données à la fois et rapporte automatiquement l'état des pipelines, pour que les problèmes soient remarqués avant que quelqu'un ait à les chercher.",
+              confidential: "Confidentiel",
+              confidentialNote: "Développé sous NDA, donc aucune capture d'écran à montrer ici.",
+            },
+            dataUpdater: {
+              title: "Application de Mise à Jour des Données",
+              date: "Automne 2024",
+              description:
+                "Un outil interne développé lors de mon passage à Services partagés Canada, où maintenir les coordonnées à jour voulait dire ouvrir plusieurs tableurs et les recouper à la main. Il récupère les courriels concernés, vérifie chaque entrée et réécrit les corrections tout seul. Il a remplacé une corvée récurrente et est resté utilisé par l'équipe.",
+            },
+            freeEats: {
+              title: "FreeEaTS",
+              date: "Oct. 2024",
+              description:
+                "Un outil pour les étudiants de l'ÉTS qui repère les événements sur le campus offrant de la nourriture gratuite, pour éviter d'avoir à vérifier la page de chaque club à la main. Il détecte les nouvelles annonces et synchronise les correspondances directement dans un agenda Google Calendar partagé. Il n'a pas d'interface propre, puisque l'agenda est tout l'intérêt de la chose.",
+              noInterface: "Aucune interface",
             },
             aspire: {
               title: "Aspire",
+              date: "Juin 2022",
               description:
-                "Développement d'un <b>assistant vocal</b> nommé <b>Aspire</b> (en cours de développement) pour le <b>contrôle d'ordinateur</b>. Il permet aux utilisateurs d'<b>ouvrir des applications</b>, de <b>naviguer sur le web</b> et de poser des questions à <b>ChatGPT</b>. Le projet utilise <b>OpenAI GPT 3</b> et <b>Python</b>, des <b>APIs</b> pour l'intégration, et la gestion de <b>fichiers audio</b>.",
+                "Un assistant vocal pour piloter un ordinateur en lui parlant : ouvrir des applications, naviguer sur le web et répondre à des questions à voix haute. Il écoute en continu, détermine si une phrase lui était adressée, et n'agit que sur celles qui le sont. Encore une expérimentation en cours plutôt qu'un produit fini.",
             },
             database: {
               title: "Interface de Base de Données Web",
+              date: "Hiver 2023",
               description:
-                "Mise en place d'une <b>interface de base de données web</b> sur un serveur <b>Raspberry Pi</b> avec une <b>interface web</b> qui simplifie l'<b>affichage</b>, la <b>saisie</b> et la <b>manipulation des données</b>. Utilisation des meilleures pratiques de <b>développement web</b>, intégration des capacités <b>SQL</b> avec une <b>interface utilisateur</b> conviviale et utilisation de <b>MariaDB</b> pour une gestion robuste de la base de données.",
+                "Une petite interface web hébergée sur un serveur maison qui rend une base de données utilisable par des gens qui n'écrivent pas de requêtes. Les enregistrements se consultent, s'ajoutent et se modifient depuis n'importe quel navigateur du réseau. L'exercice consistait à poser une surface accueillante sur ce qui vit normalement en ligne de commande.",
             },
             voiceTranslator: {
               title: "Traducteur Vocal",
+              date: "Déc. 2022",
               description:
-                "Développement d'un traducteur vocal alimenté par <b>Python</b> qui convertit la <b>parole en texte</b> à l'aide d'<b>OpenAI Whisper</b> et <b>NumPy</b> pour le traitement, traduit le texte extrait en japonais via une <b>API externe</b>, et synthétise le texte traduit en <b>parole</b> en utilisant des techniques avancées de traitement de la parole.",
-            },
-            dataUpdater: {
-              title: "Application de Synchronisation des Données",
-              description:
-                "<b>Automatisation</b> de l'extraction, de la vérification et de la mise à jour des <b>données</b> d'emails dans Excel en fonction des dates et sujets sélectionnés, dans le cadre de mon travail à Services Partagés Canada, en utilisant <b>Python</b>, <b>customTkinter</b> pour l'<b>interface graphique</b> et des <b>bibliothèques de requêtes Excel</b> pour une intégration transparente des données.",
+                "Un traducteur qui fonctionne entièrement à la voix : vous parlez dans une langue et il répond à voix haute dans une autre. Il transcrit ce qu'il entend, traduit le texte, puis synthétise le résultat en parole. L'objectif était de garder l'aller-retour assez rapide pour tenir une vraie conversation.",
             },
             classManagement: {
               title: "Système de Gestion de Classe",
+              date: "Automne 2024",
               description:
-                "Développement d'un <b>Système de Gestion de Classe</b> pour le cours LOG210, conçu pour <b>simplifier</b> la gestion des <b>cours</b>, des <b>étudiants</b> et d'autres activités académiques. Construit avec <b>TypeScript</b>, <b>Pug</b> et <b>CSS</b>.",
-            },
-            portfolio: {
-              title: "Site Web Portfolio",
-              description:
-                "Développement d'un site web personnel pour présenter mes projets, compétences et expériences en utilisant <b>React</b>. Construit avec <b>TypeScript</b> sur <b>HTML5</b> et stylisé avec <b>SASS</b> pour assurer une conception robuste, responsive et interactive.",
+                "Un système pour gérer le volet académique d'un cours universitaire : les cours eux-mêmes, les étudiants et les horaires qui les relient. C'était un projet scolaire réalisé pour un de mes cours.",
             },
           },
 
