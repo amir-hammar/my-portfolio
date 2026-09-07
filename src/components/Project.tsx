@@ -233,6 +233,12 @@ function Project() {
               className={`project-media${
                 project.id === "coeurSolidaire" ? " coeur-media" : ""
               }${
+                // All 5 CanBankX tabs share this same 1894x980 shot, which is
+                // narrower than the row's 16:7 frame — cover crops it
+                // vertically, and centered that crop was cutting into the
+                // page header at the top.
+                project.id === "canBankX" ? " canbankx-media" : ""
+              }${
                 // These two source shots are far wider than the generic
                 // mobile 4:3 frame (2.29 and 2.49 vs 1.33), so cover crops
                 // almost all of the width away and reads as zoomed in.

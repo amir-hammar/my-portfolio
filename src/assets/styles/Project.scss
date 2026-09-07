@@ -193,6 +193,15 @@
   bottom: 6%;
 }
 
+// ─── CanBankX showcase ────────────────────────────────────────────────────
+// All 5 tabs share the same 1894x980 shot (ratio ~1.93), narrower than the
+// row's 16:7 frame — `cover` has to crop it vertically. Centered, that crop
+// ate into the page header at the top on every tab; anchoring to the top
+// instead means only the empty space at the bottom gets trimmed.
+.canbankx-media > img:not(.project-inset) {
+  object-position: top;
+}
+
 // The portfolio row's own screenshot is portrait, same shape as the coeur
 // mobile shots (~0.46 ratio) — sized by height for the same reason.
 .portfolio-inset {
