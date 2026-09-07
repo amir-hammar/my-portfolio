@@ -368,7 +368,7 @@ i18n
 
           contact: {
             title: "Get in Touch",
-            description: "Have a project in mind, a role to fill, or just want to talk shop? Reach out whichever way suits you. I read both.",
+            description: "Got an internship, a project, or just want to say hi? Send me a message, I actually reply.",
             linkedinButton: "Message me on LinkedIn",
             emailButton: "Send an email",
             feedbackLead: "No message needed. Tap whatever fits, and thanks for stopping by.",
@@ -743,7 +743,7 @@ i18n
 
           contact: {
             title: "Me Contacter",
-            description: "Un projet en tête, un poste à pourvoir, ou simplement envie d'échanger ? Choisissez le canal qui vous convient, je lis les deux.",
+            description: "Un stage, un projet, ou juste envie de dire allo ? Écrivez-moi, je réponds vraiment.",
             linkedinButton: "M'écrire sur LinkedIn",
             emailButton: "Envoyer un courriel",
             feedbackLead: "Pas besoin d'écrire. Cliquez ce qui vous parle, et merci du passage.",
