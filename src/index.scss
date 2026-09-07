@@ -552,13 +552,6 @@ h6,
   pointer-events: none;
   transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1),
     visibility 0s linear 0.62s;
-  // A fixed element animating clip-path alongside its own backdrop-filter is
-  // exactly the combination some mobile WebKit versions fail to composite as
-  // a smooth transition, instead snapping straight to the end state with no
-  // visible animation. Promoting this to its own GPU layer up front is the
-  // standard fix for that.
-  will-change: clip-path;
-  transform: translateZ(0);
 
   &.is-open {
     clip-path: circle(150% at 38px 32px);
