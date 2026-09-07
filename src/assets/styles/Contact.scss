@@ -1,38 +1,98 @@
-.dark-mode {
-  .contact_wrapper {
-    .email-button {
-      background-color: #2e2d2d55 !important;
-      color: #fff !important;
+.contact-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-      @media (min-width: 769px) {
-        &:hover {
-          background-color: #5000ca !important;
-          color: #fff !important;
-        }
-      }
+.contact-lead {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease,
+    background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+
+  svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 3px;
+  }
+}
+
+// LinkedIn is the primary call: filled, so it reads first.
+.contact-btn--primary {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--royal), var(--royal-hi));
+  color: var(--white);
+  box-shadow: 0 10px 26px rgba(59, 107, 240, 0.4);
+
+  &:hover {
+    box-shadow: 0 14px 34px rgba(59, 107, 240, 0.6);
+  }
+}
+
+// Email is the quieter alternative: outlined, same size so neither looks
+// like an afterthought.
+.contact-btn--ghost {
+  border: 1px solid rgba(122, 160, 255, 0.34);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--white);
+
+  &:hover {
+    border-color: var(--royal-hi);
+    background: rgba(122, 160, 255, 0.12);
+  }
+}
+
+@media (max-width: 520px) {
+  .contact-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .contact-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-btn {
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      transform: none;
     }
   }
 }
 
-.light-mode {
-  .contact_wrapper {
-    .email-button {
-      background-color: #ffffff !important;
-      color: #1e1d1d !important;
-
-      &:hover {
-        background-color: #000 !important;
-        color: #fff !important;
-      }
-    }
-  }
-}
-
-.contact_wrapper {
-  text-align: center;
-  padding: 2rem;
-
-  .email-button {
-    margin-top: 2rem;
-  }
-}

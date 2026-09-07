@@ -1,0 +1,73 @@
+{
+  // Launch configs for the portfolio site (Vite + React).
+  // "Run website" is the one you want 99% of the time: it starts the Vite dev
+  // server (via the "dev server" task) and opens a debuggable browser on it.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run website (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      // Vite serves modules at /src/..., so the web root is the project root.
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "preLaunchTask": "dev server",
+      "postDebugTask": "stop dev server"
+    },
+    {
+      "name": "Run website (Edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "preLaunchTask": "dev server",
+      "postDebugTask": "stop dev server"
+    },
+    {
+      // Use this if the dev server is already running in a terminal.
+      "name": "Attach to running dev server (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true
+    },
+    {
+      // Builds, then serves build/ via `vite preview` on http://localhost:5000
+      "name": "Preview production build",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5000",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "serve production build",
+      "postDebugTask": "stop production preview"
+    },
+    {
+      "name": "Debug tests (Vitest)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "--no-file-parallelism", "--passWithNoTests"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "smartStep": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      // Same, but only the test file currently focused in the editor.
+      "name": "Debug current test file (Vitest)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "--no-file-parallelism", "${relativeFile}"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "smartStep": true,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

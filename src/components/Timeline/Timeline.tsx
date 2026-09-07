@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { VerticalTimeline } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 import "../../assets/styles/Timeline.scss";
+
+import stingrayLogo from "../../assets/images/logos/stingray.png";
+import sscLogo from "../../assets/images/logos/ssc.png";
+import matroxLogo from "../../assets/images/logos/matrox.png";
+import addatechLogo from "../../assets/images/logos/addatech.png";
 import TimelineItem from "./TimelineItem";
 import { Chip } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -28,9 +33,12 @@ function Timeline() {
   }, []);
 
   return (
-    <div id="history">
+    <div id="history" className="section-panel">
       <div className="items-container">
-        <h1>{t("career.title")}</h1>
+        <header className="section-head">
+          <span className="section-index">02</span>
+          <h1>{t("career.title")}</h1>
+        </header>
         <VerticalTimeline>
           <TimelineItem
             index={0}
@@ -43,7 +51,7 @@ function Timeline() {
             city={t("career.stingray.city")}
             logo={
               <img
-                src={require("../../assets/images/logos/stingray.png")}
+                src={stingrayLogo}
                 alt=""
               />
             }
@@ -86,7 +94,7 @@ function Timeline() {
             company={t("career.ssc.company")}
             city={t("career.ssc.city")}
             logo={
-              <img src={require("../../assets/images/logos/ssc.png")} alt="" />
+              <img src={sscLogo} alt="" />
             }
             details={
               <>
@@ -128,7 +136,7 @@ function Timeline() {
             city={t("career.matrox.city")}
             logo={
               <img
-                src={require("../../assets/images/logos/matrox.png")}
+                src={matroxLogo}
                 alt=""
               />
             }
@@ -172,7 +180,7 @@ function Timeline() {
             city={t("career.addatech.city")}
             logo={
               <img
-                src={require("../../assets/images/logos/addatech.png")}
+                src={addatechLogo}
                 alt=""
               />
             }

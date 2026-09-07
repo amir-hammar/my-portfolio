@@ -1,118 +1,343 @@
-.dark-mode {
-  .chip {
-    background-color: #000 !important;
-    color: #fff !important;
-
-    span {
-      color: #fff !important;
-    }
-  }
-}
-
 .skills-container {
-  padding: 0% 10%;
   display: flex;
   flex-direction: column;
-  text-align: left;
-
-  svg {
-    color: white;
-  }
-}
-
-.skills-container .skills-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 50px;
-}
-
-.skills-container .skills-grid .skill {
-  align-items: center;
   text-align: left;
 }
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 44px);
   width: 100%;
+}
 
-  // Create the layout for 3-2 pattern
-  .skill:nth-last-child(-n + 2) {
-    grid-column: span 1;
-  }
-  .skill:nth-last-child(1) {
-    grid-column: 2 / span 1;
+.skill {
+  padding: clamp(20px, 2.2vw, 30px);
+  border: 1px solid rgba(122, 160, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(10, 15, 32, 0.45);
+  transition: border-color 0.35s ease, background 0.35s ease;
+
+  &:hover {
+    border-color: rgba(122, 160, 255, 0.28);
+    background: rgba(14, 20, 42, 0.6);
   }
 }
 
-.chip {
-  color: rgb(39, 40, 34) !important;
-  background-color: white !important;
-  font-size: 0.8rem !important;
-  height: 25px !important;
+.skill-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(122, 160, 255, 0.14);
 
-  span {
-    font-family: "Courier Prime", monospace;
-    color: rgb(39, 40, 34);
+  h3 {
+    margin: 0;
+    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+    letter-spacing: 0.01em;
+  }
+}
+
+.skill-head-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--royal-hi);
+  flex-shrink: 0;
+}
+
+.tech-list {
+  display: grid;
+  // The tiles are deliberately large — the ask was logos big enough to read,
+  // with space to spare. auto-fill keeps the row count honest at any width.
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tech {
+  --tech-lift: -6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 8px 13px;
+  border: 1px solid rgba(122, 160, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+  cursor: default;
+  outline: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease, background 0.35s ease, box-shadow 0.4s ease;
+
+  // Radial bloom that blooms in behind the mark on hover.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      70% 60% at 50% 28%,
+      rgba(59, 107, 240, 0.4),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
   }
 
-  svg {
-    height: 15px !important;
+  &:hover,
+  &:focus-visible {
+    transform: translateY(var(--tech-lift));
+    border-color: rgba(122, 160, 255, 0.42);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5), 0 0 22px rgba(59, 107, 240, 0.28);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
-  @media (min-width: 768px) {
-    &:hover {
-      transform: translateY(-2px);
+  &:focus-visible {
+    border-color: var(--royal-hi);
+  }
+}
+
+.tech-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(44px, 4.4vw, 58px);
+  aspect-ratio: 1;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  img {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.38s ease;
+  }
+}
+
+// Resting state: every mark knocked out to flat white, so a wall of mixed
+// brand palettes reads as one calm constellation — and so marks that are
+// natively near-black don't disappear into the panel.
+.tech-mono {
+  filter: brightness(0) invert(1);
+  opacity: 0.82;
+}
+
+// Full-colour original, revealed on hover.
+.tech-color {
+  opacity: 0;
+}
+
+.tech-glyph {
+  width: 62%;
+  height: 62%;
+  color: var(--white);
+  opacity: 0.82;
+  transition: color 0.38s ease, opacity 0.38s ease;
+}
+
+.tech:hover,
+.tech:focus-visible {
+  .tech-mark {
+    transform: scale(1.12);
+  }
+
+  .tech-mono {
+    opacity: 0;
+  }
+
+  .tech-color {
+    opacity: 1;
+  }
+
+  .tech-glyph {
+    color: var(--royal-hi);
+    opacity: 1;
+  }
+
+  .tech-name {
+    color: var(--white);
+    opacity: 1;
+  }
+}
+
+.tech-name {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--muted);
+  opacity: 0.9;
+  transition: color 0.38s ease, opacity 0.38s ease;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .skills-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-list {
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  }
+}
+
+// Honour reduced motion: keep the colour reveal (it carries information about
+// which tile is focused) but drop the movement.
+@media (prefers-reduced-motion: reduce) {
+  .tech,
+  .tech-mark {
+    transition: border-color 0.35s ease, background 0.35s ease;
+  }
+
+  .tech:hover,
+  .tech:focus-visible {
+    transform: none;
+
+    .tech-mark {
+      transform: none;
     }
   }
 }
 
-.flex-chips {
-  line-height: 2;
-  margin: 0.5;
-
-  .chip-title {
-    color: white;
-    padding-right: 10px;
+// ─── Touch / narrow screens ───────────────────────────────────────────────
+// The white-knockout resting state only makes sense as one half of a hover
+// crossfade. With no hover there is nothing to reveal the colour, so the marks
+// would just sit there blank and white. Show the real logo outright instead and
+// drop the motion.
+//
+// `hover: none` is the accurate test (a phone, not a narrow window); the width
+// clause is there so a desktop browser resized to a phone width previews the
+// same thing.
+@media (hover: none), (max-width: 768px) {
+  .tech-mono {
+    display: none;
   }
-}
 
-.flex-chips .MuiChip-root {
-  margin-right: 0.5em;
-  cursor: pointer;
-}
+  .tech-color {
+    opacity: 1;
+  }
 
-.flex-chips .MuiChip-outlined {
-  background-color: #e0e0e0;
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
+  .tech-glyph {
+    color: var(--royal-hi);
+    opacity: 1;
+  }
 
-.flex-chips .MuiChip-outlined span {
-  color: rgb(39, 40, 34);
-}
+  .tech-name {
+    color: var(--white);
+    opacity: 0.95;
+  }
 
-@media screen {
-  @media (max-width: 768px) {
-    .skills-container {
-      display: block;
-      padding-left: 5%;
-      padding-right: 5%;
-    }
+  // No lift, no bloom, no scale — none of it is reachable without a pointer,
+  // and leaving the transitions in place only costs compositing on scroll.
+  .tech {
+    transition: none;
 
-    .skills-container .skills-grid {
-      display: initial;
-    }
-
-    .skills-container .skills-grid .skill {
-      padding-bottom: 5%;
+    &::before {
+      display: none;
     }
   }
 
-  @media (max-width: 567px) {
-    .skills {
-      font-size: 12px;
+  .tech-mark {
+    transition: none;
+  }
+
+  .tech:hover,
+  .tech:focus-visible {
+    transform: none;
+    box-shadow: none;
+
+    .tech-mark {
+      transform: none;
     }
+  }
+}
+
+// Monogram stand-in for products with no logo in any icon set. Sized and
+// coloured to sit in the same rhythm as the real marks rather than competing
+// with them.
+.tech-letter {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(122, 160, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(122, 160, 255, 0.07);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  opacity: 0.85;
+  transition: color 0.38s ease, opacity 0.38s ease, border-color 0.38s ease,
+    background 0.38s ease;
+}
+
+.tech:hover .tech-letter,
+.tech:focus-visible .tech-letter {
+  color: var(--royal-hi);
+  border-color: var(--royal-hi);
+  background: rgba(122, 160, 255, 0.14);
+  opacity: 1;
+}
+
+@media (hover: none), (max-width: 768px) {
+  .tech-letter {
+    color: var(--royal-hi);
+    border-color: rgba(122, 160, 255, 0.45);
+    opacity: 1;
+    transition: none;
+  }
+}
+
+// Wordmarks (Grafana Loki/Tempo, Mockito) are roughly 2:1, so a square box
+// would shrink them until the lettering was unreadable. Widen the box but keep
+// the height identical, so tile heights and the grid rhythm are unaffected.
+.tech-mark--wide {
+  width: clamp(74px, 7.4vw, 94px);
+  aspect-ratio: auto;
+  height: clamp(44px, 4.4vw, 58px);
+}
+
+// A monochrome logo has no colour layer to reveal, so the two rules that
+// normally hand off to it would leave the tile empty: `:hover` fades the white
+// knockout to 0, and the touch block sets it to `display: none`. Both are
+// undone here — the knockout IS the logo in this case, so it stays put and
+// only brightens on hover.
+.tech-mark--mono {
+  .tech-mono {
+    display: block;
+    opacity: 0.85;
+    // `invert(1)`, NOT the `brightness(0) invert(1)` knockout used elsewhere.
+    // These marks are not flat silhouettes: xUnit's X is 86% dark body with
+    // 13.5% light strokes running through it. Forcing brightness to 0 first
+    // collapses both groups to pure white and the strokes disappear, leaving a
+    // solid white X. A plain inversion maps dark->light and light->dark, so the
+    // internal detail survives and simply reads in reverse against the panel.
+    filter: invert(1);
+  }
+}
+
+.tech:hover .tech-mark--mono .tech-mono,
+.tech:focus-visible .tech-mark--mono .tech-mono {
+  opacity: 1;
+}
+
+@media (hover: none), (max-width: 768px) {
+  .tech-mark--mono .tech-mono {
+    display: block;
+    opacity: 0.92;
   }
 }

@@ -1,13 +1,49 @@
+// Self-hosted variable fonts rather than a Google Fonts <link>: no third-party
+// request on first paint, no CDN dependency, and one file covers every weight.
+@use "@fontsource-variable/space-grotesk";
+@use "@fontsource-variable/inter";
+
+:root {
+  // Space Grotesk for display — wide, geometric, a touch technical, which is
+  // what gives headings their cinematic weight against the starfield.
+  --font-display: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif,
+    system-ui, sans-serif;
+  // Inter for body copy: designed for screen reading at small sizes, so the
+  // long project descriptions stay comfortable.
+  --font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  // !important, and it matters more than it looks: CssBaseline also sets
+  // `background-color: #fff` from MUI's default light palette. The galaxy
+  // canvas normally paints over it so nobody notices — but the moment WebGL
+  // is unavailable (old device, WebGL disabled, GPU blocklisted) the canvas
+  // is transparent and the page fell back to white text on a white page.
+  // GalaxyHero's "CSS fallback background shows through" comment only became
+  // true once this line won the cascade.
+  background-color: #03050d !important;
+  // !important because MUI's CssBaseline injects its own `body { font-family:
+  // Roboto }` through emotion, which lands after this stylesheet and would
+  // otherwise win for every element that just inherits from body. Same reason
+  // font-size below carries it.
+  font-family: var(--font-body) !important;
+  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 1.1rem !important;
   transition: background-color var(--trans-dur), color var(--trans-dur);
+}
 
+.galaxy-hero-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  pointer-events: none;
 }
 
 body {
@@ -35,17 +71,19 @@ p, h1, h2, h3, h4, h5, h6, span, div {
     box-shadow var(--trans-dur) var(--trans-timing);
 }
 
-// Interactive elements transitions
-button,
+// Interactive elements transitions.
+//
+// No `!important` here any more. It was overriding the transition on every
+// button in the app, including ones with their own timing - the mobile menu's
+// staggered rows resolved to `transition-delay: 0s` because this five-property
+// shorthand won outright, so the whole cascade played at once.
 .MuiButton-root,
 .MuiIconButton-root,
 .tech-chip {
-  transition: 
-    background-color var(--trans-dur) var(--trans-timing),
+  transition: background-color var(--trans-dur) var(--trans-timing),
     color var(--trans-dur) var(--trans-timing),
     border-color var(--trans-dur) var(--trans-timing),
-    box-shadow var(--trans-dur) var(--trans-timing),
-    transform 0.2s ease !important;
+    box-shadow var(--trans-dur) var(--trans-timing), transform 0.2s ease;
 }
 
 code {
@@ -56,7 +94,98 @@ code {
 
 .main-container {
   position: relative;
-  background-color: #0d1116;
+}
+
+// No automatic hyphenation anywhere. `manual` is already the CSS default, but
+// stating it means a future `hyphens: auto` (or a UA that decides otherwise for
+// a given language) can't start breaking words with a dash. Long strings still
+// wrap - `overflow-wrap` handles those, and it breaks without inserting one.
+html {
+  hyphens: manual;
+  -webkit-hyphens: manual;
+}
+
+// ─── Section surfaces ─────────────────────────────────────────────────────
+// The galaxy canvas is fixed behind everything, so content used to float
+// directly on the starfield with nothing separating one section from the next.
+// These give each section a real surface: translucent enough that the stars
+// still read through it, opaque enough that text has a substrate.
+.section-panel {
+  position: relative;
+  width: min(1180px, 92vw);
+  margin: clamp(48px, 8vh, 110px) auto;
+  padding: clamp(28px, 4vw, 64px) clamp(20px, 4vw, 56px);
+  border: 1px solid rgba(122, 160, 255, 0.16);
+  border-radius: 26px;
+  background: radial-gradient(
+      120% 100% at 50% 0%,
+      rgba(59, 107, 240, 0.1),
+      transparent 60%
+    ),
+    rgba(6, 10, 24, 0.82);
+  // NO backdrop-filter here, deliberately. Blurring four full-width panels
+  // forces the compositor to re-blur a large slice of the screen on every
+  // scrolled frame, which is what made fast scrolling stutter. The fill below
+  // is opaque enough to separate the panel from the sky on its own; blur is
+  // kept only for the nav bar, which is a small fixed strip.
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+
+  // Hairline light catch along the top edge.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(122, 160, 255, 0.55),
+      transparent
+    );
+    pointer-events: none;
+  }
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: clamp(24px, 3.5vw, 48px);
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+}
+
+.section-index {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  color: var(--royal-hi);
+  opacity: 0.85;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    width: clamp(24px, 5vw, 64px);
+    height: 1px;
+    margin-left: 12px;
+    vertical-align: middle;
+    background: linear-gradient(90deg, var(--royal-hi), transparent);
+  }
+}
+
+@media (max-width: 640px) {
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }
 
 a {
@@ -81,25 +210,199 @@ h5,
 label,
 button {
   color: white;
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-body);
 }
 
-.navigation-bar {
-  
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #0d1116;
+// Headings carry the display face, tightened up — Space Grotesk is wide by
+// nature, so default tracking at large sizes reads loose.
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.nav-cta {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
 
-  button {
-    font-size: 1.1rem;
-    font-family: "Lato", sans-serif;
-    text-transform: initial;
-    padding: 6px 10px;
+// ─── Segmented nav bar ────────────────────────────────────────────────────
+// Two cells split by a hairline rule running the bar's full height, over a
+// hairline bottom border. Deliberately translucent: a solid fill would black
+// out the strip of starfield behind it.
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  border-bottom: 1px solid rgba(122, 160, 255, 0.14);
+  background: rgba(4, 7, 18, 0.42);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  transition: background 0.4s ease, border-color 0.4s ease;
+
+  // Once past the hero the bar needs more substrate, since it starts passing
+  // over panel content rather than open sky.
+  &.scrolled {
+    background: rgba(4, 7, 18, 0.72);
+    border-bottom-color: rgba(122, 160, 255, 0.22);
+  }
+}
+
+.site-nav-inner {
+  display: grid;
+  // Two visible cells at any width - the brand cell is gone, and exactly one of
+  // burger / links shows per breakpoint.
+  grid-template-columns: 1fr auto;
+  align-items: stretch;
+  min-height: var(--nav-h);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.nav-cell {
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(14px, 2.2vw, 28px);
+
+  // Drawn as a cell border so it inherits the full row height rather than being
+  // a centred pseudo-element that stops short of the edges. Named explicitly
+  // rather than using `& + .nav-cell`: the adjacent sibling selector still
+  // matches a display:none neighbour, so the hidden burger would have put a
+  // stray rule on whichever cell followed it.
+  &.nav-actions {
+    border-left: 1px solid rgba(122, 160, 255, 0.14);
+  }
+}
+
+.nav-links {
+  gap: clamp(4px, 1.4vw, 22px);
+}
+
+.nav-actions {
+  gap: 14px;
+}
+
+// Shown only on narrow screens; the links cell is hidden there instead.
+.nav-burger {
+  display: none;
+}
+
+.nav-link {
+  position: relative;
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+
+  // Underline that wipes out from the centre on hover and stays put for the
+  // section you're currently in.
+  &::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 2px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--royal), var(--royal-hi));
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  svg {
-    cursor: pointer;
+  &:hover,
+  &.is-active {
+    color: var(--white);
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+.nav-cta {
+  appearance: none;
+  cursor: pointer;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(122, 160, 255, 0.4);
+  background: linear-gradient(135deg, rgba(59, 107, 240, 0.22), rgba(122, 160, 255, 0.1));
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  white-space: nowrap;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease,
+    border-color 0.3s ease, background 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--royal-hi);
+    background: linear-gradient(135deg, var(--royal), var(--royal-hi));
+    box-shadow: 0 8px 22px rgba(59, 107, 240, 0.45);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 3px;
+  }
+}
+
+@media (max-width: 880px) {
+  .site-nav-inner {
+    grid-template-columns: auto 1fr;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-burger {
+    display: flex;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .nav-actions {
+    gap: 8px;
+    justify-content: flex-end;
+    padding-right: 10px;
+  }
+
+  .lang-switch {
+    margin-left: 0;
+  }
+
+  .nav-cta {
+    padding: 7px 12px;
+    font-size: 0.74rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link::after,
+  .nav-cta {
+    transition: none;
+  }
+
+  .nav-cta:hover {
+    transform: none;
   }
 }
 
@@ -138,71 +441,336 @@ button {
   justify-content: center;
 }
 
-.light-mode {
-  background-color: #f8f9fa;
-
-  .navigation-bar {
-    background-color: #f8f9fa;
-  }
-
-  p,
-  a,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  label,
-  button {
-    color: #0d1116;
-  }
-
-  .navigation-bar svg {
-    color: #0d1116;
-  }
-
-  .about-section {
-    background-image: url("./assets/images/home/bg-light.png");
-  }
-
-  .skills-container svg {
-    color: #0d1116;
-  }
-
-  .chip {
-    background-color: rgba(0, 0, 0, 0.08);
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  }
-
-  .vertical-timeline::before {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
-
-  .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  }
-
-  .vertical-timeline--two-columns
-    .vertical-timeline-element-content
-    .vertical-timeline-element-date {
-    color: gray;
-  }
-
-  .vertical-timeline-element-content-arrow {
-    border-right: 7px solid rgba(0, 0, 0, 0.08) !important;
-  }
-
-  .flex-chips .chip-title {
-    color: #0d1116;
-  }
-}
-
 @media screen {
   @media (max-width: 768px) {
     .items-container {
       padding: 5% 5%;
     }
+  }
+}
+
+// ─── Burger + close, drawn rather than icon fonts ─────────────────────────
+.burger {
+  position: relative;
+  display: grid;
+  place-content: center;
+  gap: 6px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(122, 160, 255, 0.22);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+
+  &:hover {
+    border-color: var(--royal-hi);
+    background: rgba(122, 160, 255, 0.12);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 3px;
+  }
+}
+
+.burger-bar {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  border-radius: 2px;
+  // Explicit, not inherited: the old MUI icon used color:inherit, which walked
+  // up to <body> and landed on CssBaseline's near-black default.
+  background: var(--white);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+// Bars converge into an X while the menu is open.
+.burger.is-open .burger-bar:first-child {
+  transform: translateY(3.75px) rotate(45deg);
+}
+
+.burger.is-open .burger-bar:last-child {
+  transform: translateY(-3.75px) rotate(-45deg);
+}
+
+.close-x {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  &::before {
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+  }
+}
+
+// ─── Full-screen mobile menu ──────────────────────────────────────────────
+// Irises open from the burger with an expanding circular clip-path, rather than
+// sliding in as a tray. Kept mounted at all times so the close animation can
+// play too; `visibility` is delayed off the end of the transition so it never
+// cuts the animation short, and holds focus out of the panel while it's shut.
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 26px 34px;
+  background: radial-gradient(
+      120% 90% at 12% 0%,
+      rgba(59, 107, 240, 0.24),
+      transparent 58%
+    ),
+    rgba(4, 7, 18, 0.94);
+  backdrop-filter: blur(26px) saturate(140%);
+  -webkit-backdrop-filter: blur(26px) saturate(140%);
+  clip-path: circle(0px at 38px 32px);
+  visibility: hidden;
+  // Belt and braces alongside visibility: a fixed, z-index 1200 element must
+  // not be able to swallow clicks while it is shut, even mid-transition.
+  pointer-events: none;
+  transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 0s linear 0.62s;
+
+  &.is-open {
+    clip-path: circle(150% at 38px 32px);
+    visibility: visible;
+    pointer-events: auto;
+    transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1),
+      visibility 0s linear 0s;
+  }
+}
+
+// The overlay exists only for the burger, which is itself hidden above 880px.
+// Removing it from the layout there means no stray fixed element can linger
+// over the desktop page.
+@media (min-width: 881px) {
+  .menu-overlay {
+    display: none;
+  }
+}
+
+.menu-overlay-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(122, 160, 255, 0.16);
+}
+
+.menu-overlay-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--royal-hi);
+}
+
+.menu-close {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(122, 160, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--white);
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.4s ease;
+
+  &:hover {
+    border-color: var(--royal-hi);
+    background: rgba(122, 160, 255, 0.12);
+    transform: rotate(90deg);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 3px;
+  }
+}
+
+.menu-overlay-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: clamp(24px, 6vh, 56px);
+}
+
+.menu-overlay-link {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: clamp(16px, 2.4vh, 24px) 2px;
+  border: none;
+  border-bottom: 1px solid rgba(122, 160, 255, 0.1);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+
+  // Each row rides in behind the iris, one after the next. `--i` comes from the
+  // component so the delay is per-index rather than hard-coded per child.
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .menu-overlay.is-open & {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.18s + var(--i) * 0.07s);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(90deg, var(--royal), transparent);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &:hover,
+  &:focus-visible,
+  &.is-active {
+    padding-left: 12px;
+
+    &::after {
+      transform: scaleX(1);
+    }
+
+    .menu-overlay-text {
+      color: var(--white);
+    }
+
+    .menu-overlay-index {
+      color: var(--royal-hi);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 2px;
+  }
+}
+
+.menu-overlay-index {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.menu-overlay-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 8vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.menu-overlay-foot {
+  margin-top: auto;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .menu-overlay.is-open & {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.46s;
+  }
+}
+
+.menu-overlay-cta {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--royal), var(--royal-hi));
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(59, 107, 240, 0.42);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px rgba(59, 107, 240, 0.6);
+  }
+}
+
+// The iris is the whole effect, so with reduced motion the panel simply
+// appears — no expanding circle, no staggered rows.
+@media (prefers-reduced-motion: reduce) {
+  .menu-overlay {
+    clip-path: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+
+    &.is-open {
+      clip-path: none;
+      opacity: 1;
+      transition: opacity 0.2s ease, visibility 0s linear 0s;
+    }
+  }
+
+  .menu-overlay-link,
+  .menu-overlay-foot {
+    opacity: 1;
+    transform: none;
+    transition: none;
+
+    .menu-overlay.is-open & {
+      transition-delay: 0s;
+    }
+  }
+
+  .burger-bar,
+  .menu-close,
+  .menu-overlay-cta {
+    transition: none;
+  }
+}
+
+// Touch-only devices can't hover at all — `:hover` styles only ever get
+// there via a tap, which either does nothing (most modern mobile browsers)
+// or, on some Android WebViews, sticks until the next tap elsewhere. Either
+// way, the *animated* transition into that state is never something a touch
+// user intended to trigger, so it's killed globally here rather than only in
+// the handful of places the site defines its own hover transitions. `(hover:
+// hover)` — not a max-width breakpoint — because a touchscreen laptop with a
+// mouse attached genuinely can hover; screen size alone can't tell you that.
+@media (hover: none) {
+  * {
+    transition: none !important;
   }
 }

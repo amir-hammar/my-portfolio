@@ -1,0 +1,191 @@
+.mission-hud {
+  position: fixed;
+  left: clamp(12px, 2vw, 24px);
+  bottom: clamp(12px, 2vw, 24px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: linear-gradient(165deg, rgba(59, 107, 240, 0.1), rgba(3, 5, 13, 0.72) 60%);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.7);
+}
+
+.like-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s, border-color 0.25s, box-shadow 0.25s;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover:not(:disabled) {
+    transform: scale(1.12);
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 16px rgba(242, 201, 76, 0.55);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  &.liked {
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 18px rgba(242, 201, 76, 0.65);
+    animation: like-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes like-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+// A little burst of stars radiating outward on like — six particles placed
+// via the --i custom property, each on its own 60deg slice of the circle.
+.like-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    margin: -2px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transform: rotate(calc(var(--i) * 60deg)) translateY(0);
+    animation: like-burst-fly 0.6s ease-out forwards;
+    animation-delay: calc(var(--i) * 18ms);
+  }
+}
+
+@keyframes like-burst-fly {
+  0% { opacity: 1; transform: rotate(calc(var(--i) * 60deg)) translateY(0) scale(1); }
+  100% { opacity: 0; transform: rotate(calc(var(--i) * 60deg)) translateY(-26px) scale(0.4); }
+}
+
+.like-count {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  white-space: nowrap;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .like-button.liked {
+    animation: none;
+  }
+
+  .like-burst i {
+    animation: none;
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .mission-hud {
+    left: 8px;
+    bottom: 8px;
+  }
+}
+// The number is the constant: always shown, always the brightest thing in the
+// pill after the star itself. It sits tight against the star so the two read as
+// one unit (a star and its total), with the sentence fenced off after it.
+.like-count {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--white);
+  white-space: nowrap;
+  user-select: none;
+  // Fixed-width digits, so the pill doesn't twitch when the total ticks over
+  // (3 to 4, or 99 to 100).
+  font-variant-numeric: tabular-nums;
+  margin-left: -2px;
+}
+
+// The message beside it is secondary. It brightens slightly while it is still
+// asking for a star, then settles once the star has been given.
+//
+// The hairline rule is what stops the count reading as the first word of the
+// sentence: without it the number and the text ran together as one line of
+// prose, and the total stopped looking like a figure.
+.like-message {
+  padding-left: 11px;
+  border-left: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  opacity: 0.82;
+  white-space: nowrap;
+  user-select: none;
+
+  &.liked {
+    color: var(--muted);
+    opacity: 1;
+  }
+}
+
+// Only the very narrowest screens drop the sentence. Measured: the pill is
+// 324px with the message, plus its 12px offset, so it still clears a 360px
+// phone and only overflows below ~340px. The count is never dropped.
+@media (max-width: 359px) {
+  .like-message {
+    display: none;
+  }
+}
+
+// A refused press jolts the star instead of emptying it, so the "no" is felt
+// before it is read.
+.like-button.refusing {
+  animation: like-refuse 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes like-refuse {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px) rotate(-6deg); }
+  35% { transform: translateX(4px) rotate(5deg); }
+  55% { transform: translateX(-3px) rotate(-3deg); }
+  75% { transform: translateX(2px) rotate(2deg); }
+}
+
+// The pleading line gets the gold used elsewhere for the hover accent, so it
+// reads as the star protesting rather than as normal status text.
+.like-message.protesting {
+  color: var(--gold);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .like-button.refusing {
+    animation: none;
+  }
+}
