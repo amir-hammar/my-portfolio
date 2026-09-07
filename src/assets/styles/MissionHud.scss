@@ -12,6 +12,13 @@
   background: linear-gradient(165deg, rgba(59, 107, 240, 0.1), rgba(3, 5, 13, 0.72) 60%);
   backdrop-filter: blur(6px);
   box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.7);
+  // The pill's width is driven entirely by its content (the sentence beside
+  // the star), with nothing here capping it — on a narrow phone a longer
+  // sentence (English runs longer than French for the same message) just
+  // pushed the right edge straight off the viewport. This caps the pill at
+  // the available width and lets the message ellipsize instead, whatever the
+  // language or the phone.
+  max-width: calc(100vw - clamp(24px, 4vw, 48px));
 }
 
 .like-button {
@@ -33,13 +40,6 @@
     height: 18px;
   }
 
-  &:hover:not(:disabled) {
-    transform: scale(1.12);
-    color: var(--gold);
-    border-color: var(--gold);
-    box-shadow: 0 0 16px rgba(242, 201, 76, 0.55);
-  }
-
   &:disabled {
     cursor: default;
     opacity: 0.6;
@@ -51,11 +51,38 @@
     box-shadow: 0 0 18px rgba(242, 201, 76, 0.65);
     animation: like-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
+  &.unliking {
+    animation: like-unpop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+// `(hover: hover)` rather than a bare `:hover`: on a touch device, tapping
+// the star matches `:hover` with nothing to ever un-match it until some
+// *other* element is tapped — the star stayed lit gold after unliking until
+// an unrelated tap happened to clear the phantom hover. Gating on real hover
+// capability means a touch tap never enters this state at all, so there's
+// nothing here to get stuck in.
+@media (hover: hover) {
+  .like-button:hover:not(:disabled) {
+    transform: scale(1.12);
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 16px rgba(242, 201, 76, 0.55);
+  }
 }
 
 @keyframes like-pop {
   0% { transform: scale(1); }
   40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+// Mirrors like-pop on the way back down, so releasing a star reads as
+// deliberate too rather than the icon just quietly reverting.
+@keyframes like-unpop {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.75); }
   100% { transform: scale(1); }
 }
 
@@ -97,7 +124,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .like-button.liked {
+  .like-button.liked,
+  .like-button.unliking {
     animation: none;
   }
 
@@ -138,6 +166,7 @@
 // sentence: without it the number and the text ran together as one line of
 // prose, and the total stopped looking like a figure.
 .like-message {
+  min-width: 0;
   padding-left: 11px;
   border-left: 1px solid var(--line);
   font-family: var(--mono);
@@ -146,20 +175,19 @@
   color: var(--white);
   opacity: 0.82;
   white-space: nowrap;
+  // Ellipsize rather than a fixed-pixel breakpoint that hid the whole
+  // sentence below some measured width: that number was tuned against one
+  // specific message and went stale (and wrong) the moment the copy changed
+  // length, which is exactly what let English overflow past the screen edge
+  // on a phone French still fit on. This adapts to any message, any language,
+  // any width, without needing to be re-measured again.
+  overflow: hidden;
+  text-overflow: ellipsis;
   user-select: none;
 
   &.liked {
     color: var(--muted);
     opacity: 1;
-  }
-}
-
-// Only the very narrowest screens drop the sentence. Measured: the pill is
-// 324px with the message, plus its 12px offset, so it still clears a 360px
-// phone and only overflows below ~340px. The count is never dropped.
-@media (max-width: 359px) {
-  .like-message {
-    display: none;
   }
 }
 

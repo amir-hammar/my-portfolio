@@ -486,13 +486,16 @@ h6,
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
-// Bars converge into an X while the menu is open.
-.burger.is-open .burger-bar:first-child {
-  transform: translateY(3.75px) rotate(45deg);
-}
-
-.burger.is-open .burger-bar:last-child {
-  transform: translateY(-3.75px) rotate(-45deg);
+// The bars used to converge into their own X while the menu was open, right
+// where the full-screen overlay's clip-path iris originates — meaning on
+// some mobile browsers this second X stayed visibly at the burger's spot
+// alongside the overlay's own close button, rather than being fully covered
+// by it. The overlay already has its own close control, so this one just
+// fades out instead of turning into a second X for it to (sometimes) hide
+// behind.
+.burger.is-open .burger-bar {
+  opacity: 0;
+  transform: scale(0.6);
 }
 
 .close-x {
@@ -549,6 +552,13 @@ h6,
   pointer-events: none;
   transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1),
     visibility 0s linear 0.62s;
+  // A fixed element animating clip-path alongside its own backdrop-filter is
+  // exactly the combination some mobile WebKit versions fail to composite as
+  // a smooth transition, instead snapping straight to the end state with no
+  // visible animation. Promoting this to its own GPU layer up front is the
+  // standard fix for that.
+  will-change: clip-path;
+  transform: translateZ(0);
 
   &.is-open {
     clip-path: circle(150% at 38px 32px);
@@ -769,8 +779,64 @@ h6,
 // the handful of places the site defines its own hover transitions. `(hover:
 // hover)` — not a max-width breakpoint — because a touchscreen laptop with a
 // mouse attached genuinely can hover; screen size alone can't tell you that.
+//
+// The blanket `*` is the problem: it doesn't distinguish a hover-triggered
+// transition from any other kind, so it was also silently killing the mobile
+// menu's own open/close reveal and its staggered link entrance — both driven
+// by a tap, nothing to do with hover — which is why the menu appeared to have
+// no animation at all on touch devices. Those get their transitions restored
+// below, at higher specificity than this `*` rule, without reopening the
+// stuck-hover bug this exists to prevent.
 @media (hover: none) {
   * {
     transition: none !important;
+  }
+}
+
+// Re-declared verbatim from the base (non-touch) rules above, at higher
+// specificity than the `*` rule so touch devices get them back — `revert`
+// won't do here, since there's no earlier same-origin declaration for it to
+// fall back to; it would just fall through to the browser default of no
+// transition at all, same as the bug this is fixing.
+//
+// Combined with prefers-reduced-motion rather than nested inside the
+// `(hover: none)` block above: an `!important` restore would otherwise also
+// outrank that other block's own (non-important) `transition: none`, forcing
+// an animation back on for someone who explicitly asked for less motion — a
+// real accessibility signal, not just a proxy for "isn't on a phone".
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .menu-overlay {
+    transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1),
+      visibility 0s linear 0.62s !important;
+
+    &.is-open {
+      transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1),
+        visibility 0s linear 0s !important;
+    }
+  }
+
+  .menu-overlay-link {
+    transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+      padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+
+    .menu-overlay.is-open & {
+      transition-delay: calc(0.18s + var(--i) * 0.07s) !important;
+    }
+
+    &::after {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+  }
+
+  .menu-overlay-foot {
+    transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) !important;
+
+    .menu-overlay.is-open & {
+      transition-delay: 0.46s !important;
+    }
+  }
+
+  .burger-bar {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease !important;
   }
 }

@@ -18,7 +18,7 @@ i18n
           },
 
           hud: {
-            invite: "Drop a like if you like what you see! 👀",
+            invite: "Like what you see? 👀",
             thanks: "Thanks for the star! 🙏",
             protest1: "Too late, no takebacks! 😄",
             protest2: "Wait, please reconsider... 🥺",
@@ -393,7 +393,7 @@ i18n
           },
 
           hud: {
-            invite: "Laissez un like si ça vous plaît ! 👀",
+            invite: "Ça vous plaît ? 👀",
             thanks: "Merci pour l'étoile ! 🙏",
             protest1: "Trop tard, on ne reprend pas ! 😄",
             protest2: "Attendez, réfléchissez bien... 🥺",

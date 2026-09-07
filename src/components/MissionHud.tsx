@@ -25,6 +25,7 @@ function MissionHud() {
   const [pending, setPending] = useState(false);
   const [failed, setFailed] = useState(false);
   const [burstKey, setBurstKey] = useState(0);
+  const [unliking, setUnliking] = useState(false);
   const [unlikeTries, setUnlikeTries] = useState(0);
   const [shakeKey, setShakeKey] = useState(0);
   const [surrendered, setSurrendered] = useState(false);
@@ -72,10 +73,16 @@ function MissionHud() {
       if (next) {
         setBurstKey((k) => k + 1);
         setSurrendered(false);
+        setUnliking(false);
       } else {
         // Sulk briefly, then fall back to inviting them again.
         setSurrendered(true);
         window.setTimeout(() => setSurrendered(false), 3200);
+        // Mirrors like-pop on the way back down — without this the star just
+        // snapped straight to its resting colour with no sense that letting
+        // go was its own deliberate action.
+        setUnliking(true);
+        window.setTimeout(() => setUnliking(false), 400);
       }
     } catch {
       setFailed(true);
@@ -99,7 +106,7 @@ function MissionHud() {
         key={shakeKey}
         className={`like-button${liked ? " liked" : ""}${
           unlikeTries > 0 ? " refusing" : ""
-        }`}
+        }${unliking ? " unliking" : ""}`}
         onClick={toggleLike}
         disabled={pending || failed || count === null}
         aria-pressed={liked}
