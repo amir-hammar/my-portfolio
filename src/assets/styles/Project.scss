@@ -317,14 +317,19 @@
   cursor: pointer;
   transition: border-color 0.3s ease, transform 0.3s ease;
 
-  &:hover {
-    border-color: var(--royal-hi);
-    transform: scale(1.08);
-  }
-
   &:focus-visible {
     outline: 2px solid var(--royal-hi);
     outline-offset: 2px;
+  }
+}
+
+// A bare :hover here is worse than cosmetic on iOS Safari: an element with a
+// :hover rule needs a first tap just to enter that state, and only a second
+// tap fires the click — this is the CoeurSolidaire showcase's theme toggle.
+@media (hover: hover) {
+  .coeur-theme-toggle:hover {
+    border-color: var(--royal-hi);
+    transform: scale(1.08);
   }
 }
 

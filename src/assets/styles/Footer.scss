@@ -48,12 +48,6 @@ footer {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease,
     background 0.3s ease, box-shadow 0.3s ease;
 
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    border-color: rgba(122, 160, 255, 0.4);
-    background: rgba(255, 255, 255, 0.06);
-  }
-
   &.tapped {
     border-color: var(--royal-hi);
     background: rgba(59, 107, 240, 0.16);
@@ -67,6 +61,17 @@ footer {
   &:focus-visible {
     outline: 2px solid var(--royal-hi);
     outline-offset: 3px;
+  }
+}
+
+// A bare :hover here is worse than cosmetic on iOS Safari: an element with a
+// :hover rule needs a first tap just to enter that state, and only a second
+// tap fires the click — these are the reaction chips people tap once.
+@media (hover: hover) {
+  .feedback-chip:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: rgba(122, 160, 255, 0.4);
+    background: rgba(255, 255, 255, 0.06);
   }
 }
 
@@ -147,17 +152,25 @@ footer {
     height: 46%;
   }
 
-  &:hover,
   &:focus-visible {
     transform: translateY(-4px) scale(1.1);
     color: var(--gold);
     border-color: var(--gold);
     box-shadow: 0 0 26px rgba(242, 201, 76, 0.85), 0 6px 18px rgba(0, 0, 0, 0.5);
-  }
-
-  &:focus-visible {
     outline: 2px solid var(--royal-hi);
     outline-offset: 4px;
+  }
+}
+
+// A bare :hover here is worse than cosmetic on iOS Safari: an element with a
+// :hover rule needs a first tap just to enter that state, and only a second
+// tap fires the click — these are the GitHub/LinkedIn social links.
+@media (hover: hover) {
+  .social-orb:hover {
+    transform: translateY(-4px) scale(1.1);
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 26px rgba(242, 201, 76, 0.85), 0 6px 18px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -167,8 +180,10 @@ footer {
   letter-spacing: 0.04em;
   color: var(--muted);
   transition: color 0.3s ease;
+}
 
-  &:hover {
+@media (hover: hover) {
+  .footer-mail:hover {
     color: var(--white);
   }
 }

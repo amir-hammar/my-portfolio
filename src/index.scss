@@ -251,6 +251,20 @@ h6,
   }
 }
 
+// This bar is fixed and sits over the scrolling WebGL starfield for the
+// entire time someone is on the page — a heavy backdrop-filter blur there is
+// one of the most expensive things a mobile browser can be asked to
+// recomposite on every scroll frame, and iOS Safari in particular struggles
+// with it. A lighter blur keeps the translucent look without asking for that
+// every frame; the higher background opacity picks up most of the slack
+// visually.
+@media (hover: none) {
+  .site-nav {
+    backdrop-filter: blur(6px) saturate(120%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+  }
+}
+
 .site-nav-inner {
   display: grid;
   // Two visible cells at any width - the brand cell is gone, and exactly one of
@@ -351,16 +365,25 @@ h6,
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease,
     border-color 0.3s ease, background 0.3s ease;
 
-  &:hover {
+  &:focus-visible {
+    outline: 2px solid var(--royal-hi);
+    outline-offset: 3px;
+  }
+}
+
+// A bare `:hover` here is worse than the stuck-color bug it causes elsewhere:
+// on iOS Safari specifically, an element with a `:hover` rule needs a first
+// tap just to enter that state, and only a second tap actually fires the
+// click — so this button silently ate the very first tap on iPhone (it kept
+// working on Android, which has no such quirk) while looking completely
+// unresponsive. Gating on real hover capability means iOS never treats it as
+// hover-aware, and a single tap goes straight through as a click.
+@media (hover: hover) {
+  .nav-cta:hover {
     transform: translateY(-2px);
     border-color: var(--royal-hi);
     background: linear-gradient(135deg, var(--royal), var(--royal-hi));
     box-shadow: 0 8px 22px rgba(59, 107, 240, 0.45);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--royal-hi);
-    outline-offset: 3px;
   }
 }
 
@@ -464,14 +487,19 @@ h6,
   cursor: pointer;
   transition: border-color 0.3s ease, background 0.3s ease;
 
-  &:hover {
-    border-color: var(--royal-hi);
-    background: rgba(122, 160, 255, 0.12);
-  }
-
   &:focus-visible {
     outline: 2px solid var(--royal-hi);
     outline-offset: 3px;
+  }
+}
+
+// Same iOS first-tap-eaten issue as .nav-cta — and this is the button that
+// opens the menu at all, so on a touch device this bare :hover would have
+// meant the very first tap on it did nothing.
+@media (hover: hover) {
+  .burger:hover {
+    border-color: var(--royal-hi);
+    background: rgba(122, 160, 255, 0.12);
   }
 }
 
@@ -599,15 +627,19 @@ h6,
   cursor: pointer;
   transition: border-color 0.3s ease, background 0.3s ease, transform 0.4s ease;
 
-  &:hover {
-    border-color: var(--royal-hi);
-    background: rgba(122, 160, 255, 0.12);
-    transform: rotate(90deg);
-  }
-
   &:focus-visible {
     outline: 2px solid var(--royal-hi);
     outline-offset: 3px;
+  }
+}
+
+// Same iOS first-tap-eaten issue — this is the button that closes the menu,
+// so a bare :hover here meant getting stuck needing a second tap to close it.
+@media (hover: hover) {
+  .menu-close:hover {
+    border-color: var(--royal-hi);
+    background: rgba(122, 160, 255, 0.12);
+    transform: rotate(90deg);
   }
 }
 
@@ -655,7 +687,6 @@ h6,
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  &:hover,
   &:focus-visible,
   &.is-active {
     padding-left: 12px;
@@ -676,6 +707,27 @@ h6,
   &:focus-visible {
     outline: 2px solid var(--royal-hi);
     outline-offset: 2px;
+  }
+}
+
+// Same iOS first-tap-eaten issue — these are the actual navigation links
+// inside the menu, so a bare :hover here meant the first tap on, say,
+// "Projects" did nothing at all on iPhone.
+@media (hover: hover) {
+  .menu-overlay-link:hover {
+    padding-left: 12px;
+
+    &::after {
+      transform: scaleX(1);
+    }
+
+    .menu-overlay-text {
+      color: var(--white);
+    }
+
+    .menu-overlay-index {
+      color: var(--royal-hi);
+    }
   }
 }
 
@@ -724,8 +776,11 @@ h6,
   cursor: pointer;
   box-shadow: 0 12px 30px rgba(59, 107, 240, 0.42);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
 
-  &:hover {
+// Same iOS first-tap-eaten issue — this is the menu's own "Let's talk" CTA.
+@media (hover: hover) {
+  .menu-overlay-cta:hover {
     transform: translateY(-2px);
     box-shadow: 0 16px 38px rgba(59, 107, 240, 0.6);
   }

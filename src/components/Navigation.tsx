@@ -124,10 +124,22 @@ function Navigation() {
       // the native easing can't be tuned, and its duration scales with distance,
       // so jumping to a far section crawled. offsetY keeps the target clear of
       // the fixed bar.
+      //
+      // autoKill was on, meant to let someone override the animation by
+      // grabbing the scrollbar or trackpad mid-flight — but on iOS a tap can
+      // register a hair of spurious touch/scroll motion right as the tween
+      // starts, which autoKill reads as "the user is scrolling manually" and
+      // cancels the tween on the spot. That's indistinguishable from the
+      // button doing nothing at all, and matched exactly what was reported:
+      // every nav action that goes through this function failed silently on
+      // iPhone (Safari and Chrome, both WebKit) while working fine on
+      // Android — and the one button that doesn't call this, the hamburger,
+      // was never affected. There's no real case here where a user needs to
+      // interrupt a one-second jump to a section by scrolling themselves.
       gsap.to(window, {
         duration: 1.1,
         ease: "power3.inOut",
-        scrollTo: { y: el, offsetY: 72, autoKill: true },
+        scrollTo: { y: el, offsetY: 72, autoKill: false },
       });
     },
     [reducedMotion]
