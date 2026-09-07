@@ -20,6 +20,11 @@
   display: flex;
   flex-direction: column;
   gap: clamp(18px, 2.4vw, 30px);
+  // Each row has its own id so a specific project can be linked directly
+  // (e.g. from LinkedIn) — this keeps the fixed nav bar from covering the
+  // top of the row on a plain browser anchor jump, matching the offsetY the
+  // in-app smooth-scroll already uses.
+  scroll-margin-top: 90px;
 }
 
 .project-media {

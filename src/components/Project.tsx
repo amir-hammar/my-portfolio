@@ -228,7 +228,7 @@ function Project() {
 
       <ol className="projects-list" ref={listRef}>
         {PROJECTS.map((project, i) => (
-          <li className="project" key={project.id}>
+          <li className="project" id={project.id} key={project.id}>
             <div
               className={`project-media${
                 project.id === "coeurSolidaire" ? " coeur-media" : ""
