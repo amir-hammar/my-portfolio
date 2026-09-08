@@ -36,7 +36,7 @@ function Timeline() {
     <div id="history" className="section-panel">
       <div className="items-container">
         <header className="section-head">
-          <span className="section-index">02</span>
+          <span className="section-index">01</span>
           <h1>{t("career.title")}</h1>
         </header>
         <VerticalTimeline>

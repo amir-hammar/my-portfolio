@@ -222,7 +222,7 @@ function Project() {
   return (
     <section className="projects-container section-panel" id="projects">
       <header className="section-head">
-        <span className="section-index">03</span>
+        <span className="section-index">02</span>
         <h1>{t("projects.title")}</h1>
       </header>
 

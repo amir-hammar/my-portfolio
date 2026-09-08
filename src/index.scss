@@ -40,8 +40,20 @@ body {
   position: fixed;
   inset: 0;
   z-index: -1;
-  width: 100vw;
-  height: 100vh;
+  // `100%`, not `100vw`/`100vh`. A fixed element's containing block is the
+  // viewport, so 100% is exactly the visible area — whereas `100vw` ignores a
+  // visible scrollbar and can be wider than the screen, and `100vh` is the
+  // tall viewport measured as if the browser's address bar were hidden.
+  // Between them the canvas hung off the right and bottom edges on a phone,
+  // and a mobile browser answers content wider than the screen by shrinking
+  // the whole page to fit — so it loaded looking zoomed out and floating
+  // instead of filling the screen at 1:1.
+  //
+  // These have to stay explicit: <canvas> is a replaced element, so with
+  // `width: auto` it takes its intrinsic drawing-buffer size and ignores
+  // `inset: 0` entirely.
+  width: 100%;
+  height: 100%;
   display: block;
   pointer-events: none;
 }
@@ -103,6 +115,23 @@ code {
 html {
   hyphens: manual;
   -webkit-hyphens: manual;
+}
+
+// The hero's orbit ring is a square SVG rotated 9 degrees, so its *bounding
+// box* is about 14% wider than the ring itself (a 344px box measures 394px
+// once rotated) — and the browser counts that box, corners and all, even
+// though the ellipse inside never reaches them. On a phone that's a few
+// pixels wider than the screen, and a mobile browser's answer to content
+// wider than the screen is to shrink the entire page to fit: the site loaded
+// zoomed out and "floating" rather than filling the screen at 1:1.
+//
+// `clip` rather than `hidden` so this never turns the page into a scroll
+// container (which would break scroll-driven animation and anchoring);
+// browsers too old to know `clip` fall back to the `hidden` above it.
+html,
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 // ─── Section surfaces ─────────────────────────────────────────────────────

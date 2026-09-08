@@ -8,9 +8,9 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 gsap.registerPlugin(ScrollToPlugin);
 
 const NAV_SECTIONS = [
-  { id: "expertise", labelKey: "navigation.expertise" },
   { id: "history", labelKey: "navigation.career" },
   { id: "projects", labelKey: "navigation.projects" },
+  { id: "expertise", labelKey: "navigation.expertise" },
   { id: "contact", labelKey: "navigation.contact" },
 ];
 

@@ -7,6 +7,16 @@ import { useTranslation } from "react-i18next";
 const API = "https://countapi.mileshilliard.com/api/v1";
 const NS = "amir-hammar-cosmos-portfolio";
 
+// The service has no uptime promise and occasionally hangs for minutes at a
+// time rather than failing fast. Without a cap, one hung request left `busy`
+// set forever and every chip on the panel disabled with it.
+const TIMEOUT_MS = 6000;
+
+const requestJson = async (url: string) => {
+  const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+  return res.json();
+};
+
 const REACTIONS = [
   { id: "design", emoji: "🎨" },
   { id: "animations", emoji: "✨" },
@@ -37,8 +47,7 @@ function FeedbackReactions() {
     let cancelled = false;
     Promise.all(
       REACTIONS.map(({ id }) =>
-        fetch(`${API}/get/${NS}.feedback-${id}`)
-          .then((r) => r.json())
+        requestJson(`${API}/get/${NS}.feedback-${id}`)
           // A key that nobody has ever hit returns {"error":"Key not found"},
           // which is simply zero rather than a failure.
           .then((d) => [id, typeof d.value === "number" ? d.value : 0] as const)
@@ -53,7 +62,9 @@ function FeedbackReactions() {
   }, []);
 
   const toggle = async (id: string) => {
-    if (busy) return;
+    // Guards this chip against overlapping requests, but leaves the other
+    // five free — they're independent counters.
+    if (busy === id) return;
     const next = !tapped[id];
     const current = counts[id] ?? 0;
     setBusy(id);
@@ -67,7 +78,7 @@ function FeedbackReactions() {
       const url = next
         ? `${API}/hit/${NS}.feedback-${id}`
         : `${API}/set/${NS}.feedback-${id}?value=${Math.max(0, current - 1)}`;
-      const d = await fetch(url).then((r) => r.json());
+      const d = await requestJson(url);
       if (typeof d.value === "number") {
         setCounts((prev) => ({ ...prev, [id]: d.value }));
       }
@@ -92,7 +103,11 @@ function FeedbackReactions() {
               type="button"
               className={`feedback-chip${tapped[id] ? " tapped" : ""}`}
               onClick={() => toggle(id)}
-              disabled={busy !== null}
+              // Only the chip actually mid-request is held, not all six. The
+              // tap has already registered visually either way, so disabling
+              // the whole row on one slow response just made five working
+              // buttons look broken.
+              disabled={busy === id}
               aria-pressed={tapped[id]}
             >
               <span className="feedback-emoji" aria-hidden="true">

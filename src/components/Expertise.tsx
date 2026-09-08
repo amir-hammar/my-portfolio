@@ -10,7 +10,7 @@ function Expertise() {
     <section className="container" id="expertise">
       <div className="skills-container section-panel">
         <header className="section-head">
-          <span className="section-index">01</span>
+          <span className="section-index">03</span>
           <h1>{t("expertise.title")}</h1>
         </header>
 

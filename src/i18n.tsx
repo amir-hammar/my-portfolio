@@ -28,7 +28,7 @@ i18n
           },
 
           navigation: {
-            expertise: "Expertise",
+            expertise: "Skills",
             career: "Career",
             projects: "Projects",
             contact: "Contact",
@@ -36,7 +36,7 @@ i18n
           },
 
           expertise: {
-            title: "Expertise",
+            title: "Skills",
             programming: {
               title: "Programming",
               skills: {
@@ -403,7 +403,7 @@ i18n
           },
 
           navigation: {
-            expertise: "Expertise",
+            expertise: "Compétences",
             career: "Carrière",
             projects: "Projets",
             contact: "Contact",
@@ -411,7 +411,7 @@ i18n
           },
 
           expertise: {
-            title: "Expertise",
+            title: "Compétences",
             programming: {
               title: "Programmation",
               skills: {

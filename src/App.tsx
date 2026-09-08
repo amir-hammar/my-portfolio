@@ -20,31 +20,41 @@ import "./i18n";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const REVEAL_SECTION_IDS = ["expertise", "history", "projects", "contact"];
+const REVEAL_SECTION_IDS = ["history", "projects", "expertise", "contact"];
 
 function App() {
   const reducedMotion = useReducedMotion();
 
-  // A URL like /#coeurSolidaire (shared on LinkedIn, say) should land right
-  // on that project, not at the top — so the reset-to-top effect below
-  // stands down whenever the URL arrived with a target already in it.
+  // A shared link can name its target two ways: `?p=coeurSolidaire` or
+  // `#coeurSolidaire`. The query parameter exists because LinkedIn (and most
+  // social platforms) route outbound links through their own redirector, and
+  // a URL fragment is client-side only — it never reaches the server, so it
+  // is dropped on the redirect and the link lands at the top of the page
+  // instead. A query parameter survives that round trip.
+  const deepLinkTarget = () => {
+    const fromQuery = new URLSearchParams(window.location.search).get("p");
+    return fromQuery || window.location.hash.slice(1);
+  };
+
+  // Whichever form it arrived in, that link should land on the project, not
+  // snap back to the top — so this stands down when there's a target.
   useEffect(() => {
-    if (window.location.hash) return;
+    if (deepLinkTarget()) return;
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
-  // Jumps to whatever the hash names — a project id, or one of the four main
+  // Jumps to whatever the link names — a project id, or one of the four main
   // sections — using the same eased scroll the nav itself uses, rather than
   // the browser's own instant anchor jump. Fired twice: once shortly after
   // mount, and once again a bit later to correct for layout that's still
   // settling then (lazy-loaded project images above the target changing the
   // page's height as they load in).
   useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (!hash) return;
+    const target = deepLinkTarget();
+    if (!target) return;
 
-    const scrollToHash = () => {
-      const el = document.getElementById(hash);
+    const scrollToTarget = () => {
+      const el = document.getElementById(target);
       if (!el) return;
 
       if (reducedMotion) {
@@ -59,8 +69,8 @@ function App() {
       });
     };
 
-    const settle = window.setTimeout(scrollToHash, 300);
-    const resettle = window.setTimeout(scrollToHash, 900);
+    const settle = window.setTimeout(scrollToTarget, 300);
+    const resettle = window.setTimeout(scrollToTarget, 900);
     return () => {
       window.clearTimeout(settle);
       window.clearTimeout(resettle);
@@ -100,9 +110,9 @@ function App() {
           <MissionHud />
           <Navigation />
           <Main />
-          <Expertise />
           <Timeline />
           <Project />
+          <Expertise />
           <Contact />
           <Footer />
         </div>
