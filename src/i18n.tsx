@@ -323,7 +323,7 @@ i18n
               title: "Data Pipeline Monitoring",
               date: "Jan 2025 – Apr 2025",
               description:
-                "A set of automated pipelines that clean and validate data before it reaches a media company's analytics platforms, built during my time at Stingray. It processes tens of gigabytes a day across dozens of tables, catching inconsistencies before they spread downstream. A monitoring layer watches several data sources at once and reports pipeline health automatically, so problems get noticed before anyone has to go looking.",
+                "A set of automated pipelines that clean and validate data before it reaches a media company's analytics platforms, built during my time at Stingray. Each pipeline runs on its own daily schedule per data source, processing tens of gigabytes across dozens of tables and catching inconsistencies before they spread downstream. Every run reports back to Microsoft Teams on its own: a quiet confirmation when everything went well, or the exact point of failure when it did not, so debugging starts from an answer instead of a guess.",
               confidential: "Confidential",
               confidentialNote: "Built under NDA, so no screenshots to show here.",
             },
@@ -698,7 +698,7 @@ i18n
               title: "Surveillance de pipelines de données",
               date: "Janv. 2025 – Avr. 2025",
               description:
-                "Un ensemble de pipelines automatisés qui nettoient et valident les données avant qu'elles n'atteignent les plateformes d'analyse d'une entreprise médiatique, développés lors de mon passage chez Stingray. Ils traitent des dizaines de gigaoctets par jour répartis sur des dizaines de tables, en repérant les incohérences avant qu'elles ne se propagent en aval. Une couche de surveillance observe plusieurs sources de données à la fois et rapporte automatiquement l'état des pipelines, pour que les problèmes soient remarqués avant que quelqu'un ait à les chercher.",
+                "Un ensemble de pipelines automatisés qui nettoient et valident les données avant qu'elles n'atteignent les plateformes d'analyse d'une entreprise médiatique, développés lors de mon passage chez Stingray. Chaque pipeline tourne selon son propre horaire quotidien par source de données, traitant des dizaines de gigaoctets répartis sur des dizaines de tables et repérant les incohérences avant qu'elles ne se propagent en aval. Chaque exécution rapporte elle-même son résultat sur Microsoft Teams : une simple confirmation quand tout s'est bien passé, ou le point exact de l'échec sinon, pour que le débogage parte d'une réponse plutôt que d'une supposition.",
               confidential: "Confidentiel",
               confidentialNote: "Développé sous NDA, donc aucune capture d'écran à montrer ici.",
             },
